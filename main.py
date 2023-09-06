@@ -23,14 +23,8 @@ def create_new_button(window,Text,Width,Height,Row,Column,Command=None):
     new_button = Button(window, text=Text, width=Width, height=Height)
     new_button.grid(row=Row, column=Column)
     return new_button
-    
-window = create_new_window("EEG_Sensor_Interface", 800, 600)
-button = create_new_button(window,"Start",10,2,0,0)
-window.mainloop()
-    
-    
-    
-    
 
-
-
+if __name__ == "__main__":
+    window = create_new_window("EEG_Sensor_Interface", 800, 600)
+    button = create_new_button(window,"Start",10,2,0,0)
+    window.mainloop()
