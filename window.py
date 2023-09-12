@@ -19,12 +19,13 @@ def create_new_window(Title, Width, Height):
     return new_window
 
 
-def create_new_button(window,Text,Width,Height,Row,Column,Command=None):
-    new_button = Button(window, text=Text, width=Width, height=Height)
-    new_button.grid(row=Row, column=Column)
+def create_new_button(window, Text, Width, Height, x=0, y=0, Command=None):
+    new_button = Button(window, text=Text, width=Width, height=Height, command=Command)
+    new_button.place(x=x, y=y)
     return new_button
+
 
 if __name__ == "__main__":
     window = create_new_window("EEG_Sensor_Interface", 800, 600)
-    button = create_new_button(window,"Start",10,2,0,0)
+    button = create_new_button(window,"Start",10,2,200,100)
     window.mainloop()
