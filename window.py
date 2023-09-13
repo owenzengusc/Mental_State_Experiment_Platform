@@ -3,6 +3,7 @@
 # https://github.com/owenzengusc/EEG_Senor_Interface.git
 
 from tkinter import *
+import tkinter as tk
 
 def create_new_window(Title, Width, Height):
     # create new window
@@ -19,10 +20,15 @@ def create_new_window(Title, Width, Height):
     return new_window
 
 
-def create_new_button(window, Text, Width, Height, x=0, y=0, Command=None):
+def create_new_button(window, Text="button", Width=10, Height=20, x=0, y=0, Command=None):
     new_button = Button(window, text=Text, width=Width, height=Height, command=Command)
     new_button.place(x=x, y=y)
     return new_button
+
+def create_entry_box(window, Width, x=0, y=0):
+    new_entry_box = Entry(window, width=Width)
+    new_entry_box.place(x=x, y=y)
+    return new_entry_box
 
 
 if __name__ == "__main__":
