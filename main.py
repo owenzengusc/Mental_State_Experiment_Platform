@@ -51,14 +51,27 @@ def main():
     vid_player = TkinterVideo(test_window, scaled=True)
     vid_player.pack(expand = True, fill = "both")
  
-    def load_video():
-        file_path = "/Users/tianaozeng/Desktop/USC/Research/Khan_Lab/EEG_Project/EEG_Senor_Interface/videos/sample-mp4-file.mp4"
+ 
+    def get_audio(file):
+        from moviepy.editor import VideoFileClip
+        # Load the MP4 file
+        video = VideoFileClip(file + ".mp4")
+        # Extract the audio
+        audio = video.audio
+        # Save the audio as an MP3 file
+        audio.write_audiofile(file + ".mp3")
+  
+    def play_video():
+        file_path = "./videos/sample-mp4-file.mp4"
         if file_path:
             vid_player.load(file_path)
             print("Video Loaded")
+            pygame.mixer.music.load("./videos/sample-mp4-file.mp3")
             vid_player.play()
+            pygame.mixer.music.play()
     
-    load_btn = tk.Button(test_window, text="Load Video", font = ("calibri", 12 ,"bold"), command = load_video)
+    
+    load_btn = tk.Button(test_window, text="Load Video", font = ("calibri", 12 ,"bold"), command = play_video)
     load_btn.pack(ipadx=120, ipady=400, anchor="nw")
     
     test_window.mainloop()
