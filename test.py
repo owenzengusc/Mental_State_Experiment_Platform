@@ -1,38 +1,30 @@
-import tkinter as tk
-from tkvideo import tkvideo
 import pygame
-import os
+#import pygame.movie
 
-
-
-def get_audio(file):
-    from moviepy.editor import VideoFileClip
-
-    # Load the MP4 file
-    video = VideoFileClip(file + ".mp4")
-
-    # Extract the audio
-    audio = video.audio
-
-    # Save the audio as an MP3 file
-    audio.write_audiofile(file + ".mp3")
-
-
-def start(file):
-    if not file + ".mp3" in os.listdir("."):
-        get_audio(file)
+def play_video_with_sound(filename):
+    # Initialize pygame
     pygame.init()
-    pygame.mixer.init()
-    pygame.mixer.music.load(file + ".mp3")
-    root = tk.Tk()
-    root.geometry("640x480")
 
-    videoPlayer = tk.Label(root)
-    videoPlayer.pack()
-    video = tkvideo(file + ".mp4", videoPlayer, loop=1, size=(640,480))
-    video.play()
-    pygame.mixer.music.play()
-    root.mainloop()
+    # Load the movie
+    movie = pygame.movie.Movie(filename)
 
+    # Set the movie screen size
+    screen = pygame.display.set_mode(movie.get_size())
 
-start("sample-mp4-file")
+    # Start playing the movie
+    movie.play()
+
+    # Main loop to keep the video playing
+    while movie.get_busy():
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                movie.stop()
+                pygame.quit()
+                return
+
+        pygame.display.flip()
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    play_video_with_sound("path_to_your_video.mpg")
