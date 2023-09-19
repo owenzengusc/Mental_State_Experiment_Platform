@@ -1,7 +1,6 @@
 # EEG_Sensor_Interface
 # Owen Zeng
 # https://github.com/owenzengusc/EEG_Senor_Interface.git
-
 from window import *
 from user import *
 from video import *
@@ -47,31 +46,15 @@ def main():
     
     lower_frame = tk.Frame(test_window, bg='lightgray')
     lower_frame.pack(fill = "both", side= BOTTOM)
- 
-    vid_player = TkinterVideo(test_window, scaled=True)
-    vid_player.pack(expand = True, fill = "both")
-
- 
-    def get_audio(file):
+    
+    
+    def play_video(f):
         from moviepy.editor import VideoFileClip
-        # Load the MP4 file
-        video = VideoFileClip("./videos/" +file + ".mp4")
-        # Extract the audio
-        audio = video.audio
-        # Save the audio as an MP3 file
-        audio.write_audiofile("./videos/" +file + ".mp3")
-  
-    def play_video(file):
-        if not file + ".mp3" in os.listdir("./videos"):
-            get_audio(file)
-        if file + ".mp3" in os.listdir("./videos"):
-            vid_player.load("./videos/" + file + ".mp4")
-            pygame.mixer.music.load("./videos/" + file + ".mp3")
-            vid_player.play()
-            pygame.mixer.music.play()
-            
-    
-    
+        video = VideoFileClip("./videos/" + f + ".mp4")
+        video = video.subclip(0, 10)
+        #video.resize(2)
+        video.preview(fps = 60,fullscreen = False)
+        
     
     load_btn = tk.Button(test_window, text="Load Video", font = ("calibri", 12 ,"bold"), command = lambda: play_video("test"))
     load_btn.pack(ipadx=12, ipady=4, anchor="nw")
