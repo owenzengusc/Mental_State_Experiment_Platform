@@ -69,6 +69,8 @@ def main():
             pygame.mixer.music.load("./videos/" + file + ".mp3")
             vid_player.play()
             pygame.mixer.music.play()
+            
+    
     
     
     load_btn = tk.Button(test_window, text="Load Video", font = ("calibri", 12 ,"bold"), command = lambda: play_video("test"))
