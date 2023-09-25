@@ -17,7 +17,7 @@ colors = {
 TOTAL_GAME_TIME = 20
 
 # Initial question frequency (number of questions per second). Value should be between 0 and 1.
-QUESTION_FREQUENCY = 0.3  # 1 question every second
+QUESTION_FREQUENCY = 0.5  # 1 question every second
 
 # Rate at which the question frequency increases after each question
 INCREASE_RATE = 0.01
@@ -130,18 +130,36 @@ class StroopTest:
         self.write_summary_to_csv()
 
     # Generate a new question
+    # def generate_question(self):
+    #     self.word, self.color = random.choice(list(colors.items()))
+    #     display_color = random.choice(list(colors.values()))
+        
+    #     # Ensure that two consecutive words don't have the same display color or the same word
+    #     while display_color == self.color or display_color == self.previous_display_color or self.word == self.previous_word:
+    #         self.word, self.color = random.choice(list(colors.items()))
+    #         display_color = random.choice(list(colors.values()))
+        
+    #     self.previous_display_color = display_color
+    #     self.previous_word = self.word
+    #     self.label.config(text=self.word, fg=display_color)
+    
     def generate_question(self):
-        self.word, self.color = random.choice(list(colors.items()))
-        display_color = random.choice(list(colors.values()))
-        
-        # Ensure that two consecutive words don't have the same display color or the same word
-        while display_color == self.color or display_color == self.previous_display_color or self.word == self.previous_word:
+        # Ensure that two consecutive words are not the same
+        while True:
             self.word, self.color = random.choice(list(colors.items()))
+            if self.word != self.previous_word:
+                break
+
+        # Ensure that two consecutive words don't have the same display color
+        while True:
             display_color = random.choice(list(colors.values()))
-        
+            if display_color != self.previous_display_color and display_color != self.color:
+                break
+
         self.previous_display_color = display_color
         self.previous_word = self.word
         self.label.config(text=self.word, fg=display_color)
+
 
     # Check the answer
     def check_answer(self, chosen_color):
