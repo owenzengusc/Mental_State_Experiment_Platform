@@ -15,13 +15,13 @@ colors = {
 }
 
 # Total game time in seconds (3 minutes = 180 seconds)
-TOTAL_GAME_TIME = 5
+TOTAL_GAME_TIME = 20
 
 # Initial question frequency (number of questions per second). Value should be between 0 and 1.
-QUESTION_FREQUENCY = 1  # 1 question every second
+QUESTION_FREQUENCY = 0.3  # 1 question every second
 
 # Rate at which the question frequency increases after each question
-INCREASE_RATE = 0.1
+INCREASE_RATE = 0.01
 
 # Maximum question frequency the game can reach
 MAX_QUESTION_FREQUENCY = 2  # 2 questions every second
@@ -162,7 +162,7 @@ class StroopTest:
     def write_header_to_csv(self):
         with open(self.path_to_file, 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(["Date", "Relative Time", "Word", "Color", "User Choice", self.username])
+            writer.writerow(["Date", "Relative Time", "Frequency", "Word", "Color", "User Choice", "Result", self.username])
     
     # Write the data to the CSV file
     def write_data_to_csv(self, user_choice):
@@ -170,7 +170,10 @@ class StroopTest:
         relative_time = int((time.time() - self.start_time) * 1000)  # Convert to milliseconds
         with open(self.path_to_file, 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([current_time, relative_time, self.word, self.color, user_choice])
+            if self.label.cget("fg") == colors[user_choice]:
+                writer.writerow([current_time, relative_time, self.current_frequency, self.word, self.color, user_choice, "CORRECT"])
+            else:
+                writer.writerow([current_time, relative_time, self.current_frequency, self.word, self.color, user_choice, "WRONG"])
 
     # Write the misses to the CSV file
     def write_miss_to_csv(self):
@@ -178,7 +181,7 @@ class StroopTest:
         relative_time = int((time.time() - self.start_time) * 1000)  # Convert to milliseconds
         with open(self.path_to_file, 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([current_time, relative_time, self.word, self.color, "MISS"])
+            writer.writerow([current_time, relative_time, self.current_frequency, self.word, self.color, "MISS", "MISS"])
 
     # Write the summary to the CSV file's first two rows and after the last row
     def write_summary_to_csv(self):
