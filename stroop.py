@@ -26,15 +26,19 @@ INCREASE_RATE = 0.1
 # Maximum question frequency the game can reach
 MAX_QUESTION_FREQUENCY = 2  # 2 questions every second
 
+# Time to wait before the game starts
 COUNTDOWN_TIME = 5
 
+# Path to the folder where the data will be stored
 PATH = './data/'
+
 class StroopTest:
     def __init__(self, root, username):
+        # Create a window
         self.root = root
         self.root.title("Stroop Test")
         self.root.configure(bg="black")
-        
+        # Initialize the game variables
         self.username = username
         self.start_time = time.time()
         self.start_time_header = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
@@ -48,32 +52,32 @@ class StroopTest:
         self.remaining_time = TOTAL_GAME_TIME
         self.answered = True  # Set to True initially to avoid the automatic miss at the start
         self.current_frequency = QUESTION_FREQUENCY
-        
+        # Create the widgets
         self.top_frame = tk.Frame(self.root, bg="black")
         self.top_frame.pack(fill=tk.BOTH, padx=10, pady=10)
-        
+        # Create the time label on the top left
         self.time_label = tk.Label(self.top_frame, text=f"Time: {self.remaining_time}", anchor='w', bg="black", fg="white")
         self.time_label.pack(side=tk.LEFT)
-        
+        # Create the speed label on the top center
         self.speed_label = tk.Label(self.top_frame, text=f"Speed: {self.current_frequency:.2f} Q/s", anchor='center', bg="black", fg="white")
         self.speed_label.pack(side=tk.LEFT, expand=True, fill=tk.X)
-        
+        # Create the score label on the top right
         self.score_label = tk.Label(self.top_frame, text="Correct: 0   Wrong: 0   Miss: 0", anchor='e', bg="black", fg="white")
         self.score_label.pack(side=tk.RIGHT)
-        
+        # Create the question label in the middle
         self.label = tk.Label(self.root, font=("Arial", 50), bg="black")
         self.label.pack(pady=100, expand=True)
-        
+        # Create the buttons frame at the bottom
         self.buttons_frame = tk.Frame(self.root, bg="black")
         self.buttons_frame.pack(pady=20)
-        
+        # Create the buttons
         for color_name in colors:
             btn = tk.Button(self.buttons_frame, text=color_name, bg=colors[color_name], command=lambda cn=color_name: self.check_answer(cn))
             btn.pack(side=tk.LEFT, padx=10)
-            
         # Start the countdown before the game begins
         self.countdown(COUNTDOWN_TIME) 
         
+    # Start the game after the countdown
     def countdown(self, count):
         if count > 0:
             self.label.config(text=str(count), fg="white")
@@ -82,17 +86,17 @@ class StroopTest:
             self.label.config(text="", fg="black")  # Clear the countdown number
             self.start_game()  # Start the game after countdown
 
-
+    # Start the game
     def start_game(self):
         self.write_header_to_csv()
         self.update_timer()
         self.question_timer()
 
-        
-
+    # Update the score
     def update_score(self):
         self.score_label.config(text=f"Correct: {self.correct_count}   Wrong: {self.wrong_count}   Miss: {self.miss_count}")
 
+    # Update the timer
     def update_timer(self):
         if self.remaining_time > 0:
             self.remaining_time -= 1
@@ -100,7 +104,8 @@ class StroopTest:
             self.root.after(1000, self.update_timer)
         else:
             self.end_game()
-            
+
+    # Update the question timer    
     def question_timer(self):
         if self.remaining_time <= 0:
             return
@@ -118,12 +123,14 @@ class StroopTest:
         self.current_frequency = min(self.current_frequency + INCREASE_RATE, MAX_QUESTION_FREQUENCY)
         self.speed_label.config(text=f"Speed: {self.current_frequency:.2f} Q/s")
 
+    # Game over
     def end_game(self):
         self.label.config(text="Game Over", fg="white")
         for widget in self.buttons_frame.winfo_children():
             widget.config(state=tk.DISABLED)
         self.write_summary_to_csv()
 
+    # Generate a new question
     def generate_question(self):
         self.word, self.color = random.choice(list(colors.items()))
         display_color = random.choice(list(colors.values()))
@@ -137,6 +144,7 @@ class StroopTest:
         self.previous_word = self.word
         self.label.config(text=self.word, fg=display_color)
 
+    # Check the answer
     def check_answer(self, chosen_color):
         if not self.answered:
             self.total_questions += 1
@@ -150,12 +158,13 @@ class StroopTest:
             self.label.config(text="", fg="black")  # Hide the question after answering
             self.root.update()
             
-            
+    # Write the header to the CSV file      
     def write_header_to_csv(self):
         with open(self.path_to_file, 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["Date", "Relative Time", "Word", "Color", "User Choice", self.username])
-
+    
+    # Write the data to the CSV file
     def write_data_to_csv(self, user_choice):
         current_time = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
         relative_time = int((time.time() - self.start_time) * 1000)  # Convert to milliseconds
@@ -163,6 +172,7 @@ class StroopTest:
             writer = csv.writer(file)
             writer.writerow([current_time, relative_time, self.word, self.color, user_choice])
 
+    # Write the misses to the CSV file
     def write_miss_to_csv(self):
         current_time = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
         relative_time = int((time.time() - self.start_time) * 1000)  # Convert to milliseconds
@@ -170,6 +180,7 @@ class StroopTest:
             writer = csv.writer(file)
             writer.writerow([current_time, relative_time, self.word, self.color, "MISS"])
 
+    # Write the summary to the CSV file's first two rows and after the last row
     def write_summary_to_csv(self):
         # Read the entire CSV file into memory
         with open(self.path_to_file, 'r', newline='') as readFile:
