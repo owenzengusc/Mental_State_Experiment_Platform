@@ -2,7 +2,6 @@ import tkinter as tk
 import random
 import csv
 import time
-import os
 
 # Define the colors and their names
 colors = {
