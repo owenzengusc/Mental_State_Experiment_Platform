@@ -30,6 +30,8 @@ def main():
         canvas.create_window(200, 230, window=user_name_lable)
         ppl.name = user_name
     
+    label_enter_name = tk.Label(pre_window, text="Please enter your name:")
+    canvas_main.create_window(200, 100, window=label_enter_name)
     # button1 is a button that calls get_user_name() when clicked
     button1 = tk.Button(text='Enter', command= lambda: get_user_name(pre_window, entry_name, canvas_main))
    
@@ -81,7 +83,7 @@ def main():
         test_example.place(x=12,y=150)
         test_example_word = Label(stroop_instruction_window, text="RED", fg="blue")
         test_example_word.place(x=12,y=180)
-        test_example_continue = Label(stroop_instruction_window, text="You should select Blue by pressing 'B'. ", fg="black")
+        test_example_continue = Label(stroop_instruction_window, text="You should select Blue by clicking on the Blue button", fg="black")
         test_example_continue.place(x=12,y=210)
         
         def start_stroop_test():
@@ -97,7 +99,7 @@ def main():
             if start_stroop_test == 1:
                 print("start stroop test")
                 stroop_instruction_window.destroy()
-                stroop_test_window = create_new_window("Stroop Test", WINDOW_WIDTH, WINDOW_HEIGHT)
+                stroop_test_window = tk.Tk()
                 app = StroopTest(stroop_test_window,ppl.name)
                 stroop_test_window.mainloop()
                 break

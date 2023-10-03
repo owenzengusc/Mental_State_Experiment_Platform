@@ -20,7 +20,7 @@ TOTAL_GAME_TIME = 20
 QUESTION_FREQUENCY = 0.5  # 1 question every second
 
 # Rate at which the question frequency increases after each question
-INCREASE_RATE = 0.01
+INCREASE_RATE = 0.015
 
 # Maximum question frequency the game can reach
 MAX_QUESTION_FREQUENCY = 2  # 2 questions every second
