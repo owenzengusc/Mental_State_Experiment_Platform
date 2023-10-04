@@ -29,7 +29,7 @@ if __name__=="__main__":
     
     # Ask user to enter test number
     while True:
-        flag = input("\nPlease enter 1 to view the videos, 2 to add a new videos, 3 to edit the tests, 4 to delete a video, 5 to exit: ")
+        flag = input("\nPlease enter 1 to view the tests, 2 to add a new test, 3 to edit the tests, 4 to delete a test, 5 to exit: ")
         if flag == "1":
             print("\nTostal Test Number:  ", test_dict["Total_Test_Number"], "\n")
             if test_dict["Total_Test_Number"] == 0:

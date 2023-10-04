@@ -1,0 +1,40 @@
+Start Time,Total Questions,Total Correct,Total Wrong,Min Operation,Max Operation,Owen
+10/03/2023 18:31:43,5,0,5,2,6
+Start Time,Total Questions,Total Correct,Total Wrong,Min Operation,Max Operation,Owen
+10/03/2023 18:29:56,1,1,0,2,6
+Start Time,Total Questions,Total Correct,Total Wrong,Min Operation,Max Operation,Owen
+10/03/2023 18:27:15,7,3,4,2,6
+Start Time,Total Questions,Total Correct,Total Wrong,Min Operation,Max Operation,Owen
+10/03/2023 17:10:34,5,2,3,2,10
+Date Time,Relative Time,Expression,Answer,User Choice,Result,Owen
+10/03/2023 17:10:37,2375,99 - 95 + 98 - 30 + 4,76,56,Incorrect
+10/03/2023 17:10:37,2927,46 - 2 * 10 + 48,74,97,Incorrect
+10/03/2023 17:10:38,3375,40 - 83 - ( 28 + 78 ) + 99 + 71,21,21,Correct
+10/03/2023 17:10:38,4276,2 * 36 - 25 + 28,75,84,Incorrect
+10/03/2023 17:10:39,4792,19 - 25 + 88 - 73,9,9,Correct
+Start Time,Total Questions,Total Correct,Total Wrong,Min Operation,Max Operation,Owen
+10/03/2023 17:10:34,5,2,3,2,10
+Date Time,Relative Time,Expression,Answer,User Choice,Result,Owen
+10/03/2023 18:26:59,2989,( 52 - 2 ) / 5,10,10,Correct
+Date Time,Relative Time,Expression,Answer,User Choice,Result,Owen
+10/03/2023 18:27:22,7342,50 + 19 + 8,77,77,Correct
+10/03/2023 18:27:23,8026,49 - 20 + 27,56,56,Correct
+10/03/2023 18:27:23,8677,97 - ( 43 - 13 ),67,88,Incorrect
+10/03/2023 18:27:24,9259,8 / 13 * 26,16,79,Incorrect
+10/03/2023 18:27:24,9726,34 + 60 / 48 * 68 - 30,89,89,Correct
+10/03/2023 18:27:25,10395,12 - 34 + 28 + 81,87,73,Incorrect
+10/03/2023 18:27:26,11042,12 - 34 + 28 + 81,87,73,Incorrect
+Start Time,Total Questions,Total Correct,Total Wrong,Min Operation,Max Operation,Owen
+10/03/2023 18:27:15,7,3,4,2,6
+Date Time,Relative Time,Expression,Answer,User Choice,Result,Owen
+10/03/2023 18:30:04,8613,10 - 52 + 66,24,24,Correct
+Start Time,Total Questions,Total Correct,Total Wrong,Min Operation,Max Operation,Owen
+10/03/2023 18:29:56,1,1,0,2,6
+Date Time,Relative Time,Expression,Answer,User Choice,Result,Owen
+10/03/2023 18:31:49,5966,38 + 13 - 15 - 14 - 67 + 79,34,4,Incorrect
+10/03/2023 18:31:50,6999,96 - 53 - 57 + 35 - 10,11,87,Incorrect
+10/03/2023 18:31:51,7947,10 / ( 6 / 2 + 2 ) - 55 + 65,12,13,Incorrect
+10/03/2023 18:31:52,8914,34 - 48 - 16 - 9 * 3 + 90,33,18,Incorrect
+10/03/2023 18:31:53,10124,42 / 21 * 36 - 68 + 39,43,12,Incorrect
+Start Time,Total Questions,Total Correct,Total Wrong,Min Operation,Max Operation,Owen
+10/03/2023 18:31:43,5,0,5,2,6

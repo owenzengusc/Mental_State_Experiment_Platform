@@ -1,27 +1,28 @@
 import tkinter as tk
 import random
 import csv
+import time
 
 
 # Total game time in seconds
-TOTAL_GAME_TIME = 60
+TOTAL_GAME_TIME = 6
 
 # Minimum and maximum number of operations in the math expressions
 MIN_NUM_OPERATIONS = 2
-MAX_NUM_OPERATIONS = 10
+MAX_NUM_OPERATIONS = 6
 
 
 # possibility of including parentheses in the expression
 PARENTHESIS_PROBABILITY = 0.7
 
 #
-COUNTDOWN = 1
+COUNTDOWN = 5
 
 # Path to the folder where the data will be stored
 PATH = './data/'
 
 class MathTest:
-    def __init__(self, root, username):
+    def __init__(self, root, username, callback=None):
         self.root = root
         self.root.title("Math Test")
         self.root.configure(bg="black")
@@ -32,7 +33,6 @@ class MathTest:
         self.wrong_count = 0
         self.total_questions = 0
         self.remaining_time = TOTAL_GAME_TIME
-        
         self.top_frame = tk.Frame(self.root, bg="black")
         self.top_frame.pack(fill=tk.BOTH, padx=10, pady=10)
         
@@ -53,8 +53,12 @@ class MathTest:
             btn = tk.Button(self.buttons_frame, text="", command=lambda idx=i: self.check_answer(idx))
             btn.pack(side=tk.LEFT, padx=10)
             self.option_buttons.append(btn)
-        
+            
+        self.start_time = time.time()
+        self.start_time_header = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(self.start_time))
+        self.write_header_to_csv()
         self.countdown(COUNTDOWN)
+        self.callback = callback
         
     def countdown(self, count):
         if count > 0:
@@ -74,6 +78,8 @@ class MathTest:
             self.end_game()
 
     def generate_question(self):
+        if self.remaining_time <= 0:
+            return
         self.expression, self.answer = self.create_math_expression()
         self.question_label.config(text=self.expression)
         
@@ -152,20 +158,58 @@ class MathTest:
         for btn in self.option_buttons:
             btn.config(state=tk.DISABLED)
         self.write_summary_to_csv()
+        if self.callback:
+            self.callback()
 
-    def write_data_to_csv(self, user_choice):
+    def write_data_to_csv(self, user_choice_idx):
+        current_time = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
+        user_choice = self.option_buttons[user_choice_idx].cget("text")
+        relative_time = int((time.time() - self.start_time) * 1000)  # Convert to milliseconds
+        result = "Correct" if user_choice == str(self.answer) else "Incorrect"
         with open(self.path_to_file, 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([self.expression, self.answer, user_choice])
+            writer.writerow([current_time, relative_time, self.expression, self.answer, user_choice, result])
 
     def write_summary_to_csv(self):
+        # Read the entire CSV file into memory
+        with open(self.path_to_file, 'r', newline='') as readFile:
+            reader = csv.reader(readFile)
+            lines = list(reader)
+            # Insert the summary rows at the top
+            lines.insert(0, ["Start Time", "Total Questions", "Total Correct", "Total Wrong", "Min Operation", "Max Operation",self.username])
+            lines.insert(1, [self.start_time_header, self.total_questions, self.correct_count, self.wrong_count, MIN_NUM_OPERATIONS, MAX_NUM_OPERATIONS])
+    
+        # Write the modified content back to the CSV file
+        with open(self.path_to_file, 'w', newline='') as writeFile:
+            writer = csv.writer(writeFile)
+            writer.writerows(lines)
+            writer.writerow(["Start Time", "Total Questions", "Total Correct", "Total Wrong", "Min Operation", "Max Operation", self.username])
+            writer.writerow([self.start_time_header, self.total_questions, self.correct_count, self.wrong_count, MIN_NUM_OPERATIONS, MAX_NUM_OPERATIONS])
+
+    def write_header_to_csv(self):
         with open(self.path_to_file, 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(["Total Questions", "Total Correct", "Total Wrong"])
-            writer.writerow([self.total_questions, self.correct_count, self.wrong_count])
-
+            writer.writerow(["Date Time", "Relative Time", "Expression", "Answer", "User Choice", "Result", self.username])
+           
 if __name__ == "__main__":
     root = tk.Tk()
+    
+    # Fix the window size
+    root.minsize(800, 600)  # Set to your desired width and height
+    root.maxsize(800, 600)  # Set to your desired width and height
+
+    # Center the window
+    window_width = 800  # Set to your desired width
+    window_height = 600  # Set to your desired height
+
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+
+    x_coordinate = int((screen_width / 2) - (window_width / 2))
+    y_coordinate = int((screen_height / 2) - (window_height / 2))
+
+    root.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
+
     username = input("Enter your name: ")
     app = MathTest(root, username)
     root.mainloop()

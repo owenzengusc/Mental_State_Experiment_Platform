@@ -3,8 +3,8 @@
 # https://github.com/owenzengusc/EEG_Senor_Interface.git
 from window import *
 from user import *
-from stroop import *
-#from video import *
+from StroopTest import *
+from MathTest import *
 
 TEST = "stroop"
 WINDOW_WIDTH = 1200

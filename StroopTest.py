@@ -32,7 +32,7 @@ COUNTDOWN_TIME = 5
 PATH = './data/'
 
 class StroopTest:
-    def __init__(self, root, username):
+    def __init__(self, root, username, callback=None):
         # Create a window
         self.root = root
         self.root.title("Stroop Test")
@@ -74,7 +74,8 @@ class StroopTest:
             btn = tk.Button(self.buttons_frame, text=color_name, bg=colors[color_name], command=lambda cn=color_name: self.check_answer(cn))
             btn.pack(side=tk.LEFT, padx=10)
         # Start the countdown before the game begins
-        self.countdown(COUNTDOWN_TIME) 
+        self.countdown(COUNTDOWN_TIME)
+        self.callback = callback 
         
     # Start the game after the countdown
     def countdown(self, count):
@@ -128,21 +129,10 @@ class StroopTest:
         for widget in self.buttons_frame.winfo_children():
             widget.config(state=tk.DISABLED)
         self.write_summary_to_csv()
+        if self.callback:
+            self.callback()
 
-    # Generate a new question
-    # def generate_question(self):
-    #     self.word, self.color = random.choice(list(colors.items()))
-    #     display_color = random.choice(list(colors.values()))
-        
-    #     # Ensure that two consecutive words don't have the same display color or the same word
-    #     while display_color == self.color or display_color == self.previous_display_color or self.word == self.previous_word:
-    #         self.word, self.color = random.choice(list(colors.items()))
-    #         display_color = random.choice(list(colors.values()))
-        
-    #     self.previous_display_color = display_color
-    #     self.previous_word = self.word
-    #     self.label.config(text=self.word, fg=display_color)
-    
+
     def generate_question(self):
         # Ensure that two consecutive words are not the same
         while True:
@@ -219,6 +209,23 @@ class StroopTest:
 
 if __name__ == "__main__":
     root = tk.Tk()
+    
+    # Fix the window size
+    root.minsize(800, 600)  # Set to your desired width and height
+    root.maxsize(800, 600)  # Set to your desired width and height
+
+    # Center the window
+    window_width = 800  # Set to your desired width
+    window_height = 600  # Set to your desired height
+
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+
+    x_coordinate = int((screen_width / 2) - (window_width / 2))
+    y_coordinate = int((screen_height / 2) - (window_height / 2))
+
+    root.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
+
     username = input("Enter your name: ")
     app = StroopTest(root, username)
     root.mainloop()
