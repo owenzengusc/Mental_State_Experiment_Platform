@@ -106,9 +106,6 @@ def main():
             stroop_instruction_window.update()
         
         
-        
-    
-
     #pre_window.mainloop()
 
 if __name__ == "__main__":
