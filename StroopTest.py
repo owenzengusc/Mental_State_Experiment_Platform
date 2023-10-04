@@ -129,6 +129,7 @@ class StroopTest:
         for widget in self.buttons_frame.winfo_children():
             widget.config(state=tk.DISABLED)
         self.write_summary_to_csv()
+        self.root.after(2000, self.root.destroy) 
         if self.callback:
             self.callback()
 

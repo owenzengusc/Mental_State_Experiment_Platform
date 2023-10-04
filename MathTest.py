@@ -158,6 +158,7 @@ class MathTest:
         for btn in self.option_buttons:
             btn.config(state=tk.DISABLED)
         self.write_summary_to_csv()
+        self.root.after(2000, self.root.destroy) 
         if self.callback:
             self.callback()
 

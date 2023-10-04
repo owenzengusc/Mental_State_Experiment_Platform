@@ -5,112 +5,92 @@ from window import *
 from user import *
 from StroopTest import *
 from MathTest import *
+from FeedbackScreen import FeedbackScreen
+from InstructionScreen import InstructionScreen
+import json
 
-TEST = "stroop"
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 1000
-start_stroop_test = 0
+TEST_WINDOW_WIDTH = 900
+TEST_WINDOW_HEIGHT = 700
+AVERAGE_TEST_DURATION = 5
 
+def load_test_sequence():
+    with open('./test/test.json', 'r') as file:
+        data = json.load(file)
+        return data["Test_List"]
+
+def show_instruction_screen(test_name):
+    instruction_window = create_new_window(test_name, WINDOW_WIDTH, WINDOW_HEIGHT)
+    if test_name == "StroopTest":
+        app = InstructionScreen(instruction_window, "StroopTest", instruction_window.destroy)
+    elif test_name == "MathTest":
+        app = InstructionScreen(instruction_window, "MathTest", instruction_window.destroy)
+    instruction_window.mainloop()
 
 def main():
+    # Improved "Enter Name" screen layout
     pre_window = create_new_window("EEG_Sensor_Interface", 800, 600)
-    # create new canvas
-    canvas_main = tk.Canvas(pre_window, width=800, height=600)
-    canvas_main.pack()
+    canvas_main = tk.Canvas(pre_window, width=800, height=600, bg="lightgray")
+    canvas_main.pack(fill="both", expand=True)
 
-    # create new entry box
-    entry_name = tk.Entry(pre_window) 
-    #
-    canvas_main.create_window(200, 140, window=entry_name)
-    
+    label_enter_name = tk.Label(pre_window, text="Please enter your name:", font=("calibri", 14), bg="lightgray")
+    canvas_main.create_window(400, 250, window=label_enter_name)
+
+    entry_name = tk.Entry(pre_window, font=("calibri", 12))
+    canvas_main.create_window(400, 280, window=entry_name)
+
+    button1 = tk.Button(text='Enter', font=("calibri", 12), command=lambda: get_user_name(pre_window, entry_name, canvas_main))
+    canvas_main.create_window(400, 320, window=button1)
+
     ppl = Participant()
     def get_user_name(windw, enntry, canvas):
         user_name = enntry.get()
-        user_name_lable = tk.Label(windw, text=user_name)
-        canvas.create_window(200, 230, window=user_name_lable)
         ppl.name = user_name
-    
-    label_enter_name = tk.Label(pre_window, text="Please enter your name:")
-    canvas_main.create_window(200, 100, window=label_enter_name)
-    # button1 is a button that calls get_user_name() when clicked
-    button1 = tk.Button(text='Enter', command= lambda: get_user_name(pre_window, entry_name, canvas_main))
-   
-    canvas_main.create_window(200, 180, window=button1)
+        windw.destroy()
+
     while True:
-        # wait for user to enter name
         if ppl.name != "New_User":
-            print(ppl.name)
             break
         pre_window.update()
-        
-    pre_window.destroy()
-        
-    test_window = create_new_window("Test", 900, 700)
-    #canvas_test = tk.Canvas(test_window, width=900, height=700)
-    #canvas_test.pack()
-    
-    frame = tk.Frame(test_window)
-    frame.pack()
-    
-    lower_frame = tk.Frame(test_window, bg='lightgray')
-    lower_frame.pack(fill = "both", side= BOTTOM)
-    
-    
-    def play_video(f):
-        from moviepy.editor import VideoFileClip
-        video = VideoFileClip("./videos/" + f + ".mp4")
-        video = video.subclip(0, 10)
-        #video.resize(2)
-        video.preview(fps = 60,fullscreen = False)
-        
-    
-    load_btn = tk.Button(test_window, text="Load Video", font = ("calibri", 12 ,"bold"), command = lambda: play_video("test"))
-    load_btn.pack(ipadx=12, ipady=4, anchor="nw")
-    #test_window.mainloop()
-    test_window.destroy()
-    
-    if TEST == "stroop":
-        stroop_instruction_window = create_new_window("Stroop", WINDOW_WIDTH, WINDOW_HEIGHT)
-        canvas_stroop = tk.Canvas(stroop_instruction_window, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
-        canvas_stroop.pack()
-        #text = Label(stroop_instruction_window, text="Just do it", bg="red", fg="yellow")
-        test_name = Label(stroop_instruction_window, text="Stroop Test", bg="red", fg="Yellow", font = ("calibri", 20 ,"bold"))
-        #place the text in the center of the window
-        test_name.place(x=WINDOW_WIDTH/2-40,y=60)
-        test_instruction = Label(stroop_instruction_window, text="In this experiment you are required to select the color of the word, not what the word says.", fg="black")
-        test_instruction.place(x=12,y=120)
-        test_example = Label(stroop_instruction_window, text="For example, if the word is:", fg="black")
-        test_example.place(x=12,y=150)
-        test_example_word = Label(stroop_instruction_window, text="RED", fg="blue")
-        test_example_word.place(x=12,y=180)
-        test_example_continue = Label(stroop_instruction_window, text="You should select Blue by clicking on the Blue button", fg="black")
-        test_example_continue.place(x=12,y=210)
-        
-        def start_stroop_test():
-            nonlocal start_stroop_test
-            start_stroop_test = 1
-        
-        start_stroop = tk.Button(stroop_instruction_window, text="Start", font = ("calibri", 12 ,"bold"), command =start_stroop_test)
-        #start_stroop.place(x=WINDOW_WIDTH/2-40,y=300)
-        canvas_stroop.create_window(WINDOW_WIDTH/2, WINDOW_HEIGHT-600, window=start_stroop)
-        #start_stroop.pack()
-        
-        while True:
-            if start_stroop_test == 1:
-                print("start stroop test")
-                stroop_instruction_window.destroy()
-                stroop_test_window = tk.Tk()
-                app = StroopTest(stroop_test_window,ppl.name)
-                stroop_test_window.mainloop()
-                break
-            stroop_instruction_window.update()
-        
-        
-    #pre_window.mainloop()
+
+    # Welcome screen
+    welcome_window = create_new_window("Welcome", 800, 600)
+    canvas_welcome = tk.Canvas(welcome_window, width=800, height=600, bg="lightgray")
+    canvas_welcome.pack(fill="both", expand=True)
+
+    welcome_label = tk.Label(welcome_window, text=f"Welcome, {ppl.name}!", font=("calibri", 20, "bold"), bg="lightgray")
+    canvas_welcome.create_window(400, 250, window=welcome_label)
+
+    test_sequence = load_test_sequence()
+    num_tests = len(test_sequence)
+    total_duration = num_tests * AVERAGE_TEST_DURATION
+
+    test_info_label = tk.Label(welcome_window, text=f"You will be taking {num_tests} tests today: {', '.join(test_sequence)}.\nThis will take approximately {total_duration} minutes.", font=("calibri", 14), bg="lightgray")
+    canvas_welcome.create_window(400, 300, window=test_info_label)
+
+    continue_button = tk.Button(welcome_window, text="Continue", font=("calibri", 12), command=welcome_window.destroy)
+    canvas_welcome.create_window(400, 350, window=continue_button)
+    welcome_window.mainloop()
+
+    for test in test_sequence:
+        show_instruction_screen(test)
+
+        if test == "StroopTest":
+            stroop_test_window = tk.Tk()
+            stroop_test_window.geometry(f"{TEST_WINDOW_WIDTH}x{TEST_WINDOW_HEIGHT}+{(stroop_test_window.winfo_screenwidth() - TEST_WINDOW_WIDTH) // 2}+{(stroop_test_window.winfo_screenheight() - TEST_WINDOW_HEIGHT) // 2}")
+            app = StroopTest(stroop_test_window, ppl.name)
+            stroop_test_window.mainloop()
+
+        elif test == "MathTest":
+            math_test_window = tk.Tk()
+            math_test_window.geometry(f"{TEST_WINDOW_WIDTH}x{TEST_WINDOW_HEIGHT}+{(math_test_window.winfo_screenwidth() - TEST_WINDOW_WIDTH) // 2}+{(math_test_window.winfo_screenheight() - TEST_WINDOW_HEIGHT) // 2}")
+            app = MathTest(math_test_window, ppl.name)
+            math_test_window.mainloop()
+
+    feedback_window = tk.Tk()
+    app = FeedbackScreen(feedback_window, ppl.name)
+    feedback_window.mainloop()
 
 if __name__ == "__main__":
     main()
-
-    
-    
-
