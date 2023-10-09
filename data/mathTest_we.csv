@@ -1,0 +1,10 @@
+Date Time,Relative Time,Expression,Answer,User Choice,Result,we
+Date Time,Relative Time,Expression,Answer,User Choice,Result,we
+10/09/2023 14:54:48,5706,19 + 93 + 24 / 2 - 83 - 39,2,2,Correct
+10/09/2023 14:54:49,7209,29 + 9 + 47,85,85,Correct
+10/09/2023 14:54:53,10678,8 - 16 + 18 + 34,44,44,Correct
+10/09/2023 14:54:57,14961,51 - 19 + 94 - 54 + 18,90,82,Incorrect
+10/09/2023 14:54:59,17090,66 - 15 + 18 - 63,6,66,Incorrect
+10/09/2023 14:55:03,20896,( 99 + 3 ) / 6,17,17,Correct
+10/09/2023 14:55:05,22327,8 + 65 + 11,84,19,Incorrect
+10/09/2023 14:55:08,25598,71 + 93 - 65 - 27,72,72,Correct

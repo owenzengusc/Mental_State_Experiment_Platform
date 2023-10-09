@@ -14,7 +14,7 @@ colors = {
 }
 
 # Total game time in seconds (3 minutes = 180 seconds)
-TOTAL_GAME_TIME = 20
+TOTAL_GAME_TIME = 60*3
 
 # Initial question frequency (number of questions per second). Value should be between 0 and 1.
 QUESTION_FREQUENCY = 0.5  # 1 question every second
@@ -57,12 +57,12 @@ class StroopTest:
         # Create the time label on the top left
         self.time_label = tk.Label(self.top_frame, text=f"Time: {self.remaining_time}", anchor='w', bg="black", fg="white")
         self.time_label.pack(side=tk.LEFT)
-        # Create the speed label on the top center
-        self.speed_label = tk.Label(self.top_frame, text=f"Speed: {self.current_frequency:.2f} Q/s", anchor='center', bg="black", fg="white")
-        self.speed_label.pack(side=tk.LEFT, expand=True, fill=tk.X)
-        # Create the score label on the top right
-        self.score_label = tk.Label(self.top_frame, text="Correct: 0   Wrong: 0   Miss: 0", anchor='e', bg="black", fg="white")
-        self.score_label.pack(side=tk.RIGHT)
+        # # Create the speed label on the top center
+        # self.speed_label = tk.Label(self.top_frame, text=f"Speed: {self.current_frequency:.2f} Q/s", anchor='center', bg="black", fg="white")
+        # self.speed_label.pack(side=tk.LEFT, expand=True, fill=tk.X)
+        # # Create the score label on the top right
+        # self.score_label = tk.Label(self.top_frame, text="Correct: 0   Wrong: 0   Miss: 0", anchor='e', bg="black", fg="white")
+        # self.score_label.pack(side=tk.RIGHT)
         # Create the question label in the middle
         self.label = tk.Label(self.root, font=("Arial", 50), bg="black")
         self.label.pack(pady=100, expand=True)
@@ -94,7 +94,8 @@ class StroopTest:
 
     # Update the score
     def update_score(self):
-        self.score_label.config(text=f"Correct: {self.correct_count}   Wrong: {self.wrong_count}   Miss: {self.miss_count}")
+        #self.score_label.config(text=f"Correct: {self.correct_count}   Wrong: {self.wrong_count}   Miss: {self.miss_count}")
+        pass
 
     # Update the timer
     def update_timer(self):
@@ -121,7 +122,7 @@ class StroopTest:
         self.root.after(int(1000 / self.current_frequency), self.question_timer)  # Adjusted for current frequency
         # Increase the frequency for the next question, but don't exceed the maximum
         self.current_frequency = min(self.current_frequency + INCREASE_RATE, MAX_QUESTION_FREQUENCY)
-        self.speed_label.config(text=f"Speed: {self.current_frequency:.2f} Q/s")
+        #self.speed_label.config(text=f"Speed: {self.current_frequency:.2f} Q/s")
 
     # Game over
     def end_game(self):

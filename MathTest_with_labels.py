@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 import random
 import csv
 import time
@@ -8,16 +7,15 @@ import time
 # Total game time in seconds
 TOTAL_GAME_TIME = 60*3
 
-# Define your constants outside the class
-MAX_NUM_OPERATIONS = 7  # Maximum number of operations
-MIN_NUM_OPERATIONS = 1  # Minimum number of operations
-DIFFICULTY_INCREMENT = 1  # How much to increment the difficulty by
-TIME_THRESHOLD = 20  # Set your time threshold here
+# Minimum and maximum number of operations in the math expressions
+MIN_NUM_OPERATIONS = 2
+MAX_NUM_OPERATIONS = 6
 
-# Possibility of including parentheses in the expression
+
+# possibility of including parentheses in the expression
 PARENTHESIS_PROBABILITY = 0.7
 
-# Countdown before game start
+#
 COUNTDOWN = 5
 
 # Path to the folder where the data will be stored
@@ -35,14 +33,14 @@ class MathTest:
         self.wrong_count = 0
         self.total_questions = 0
         self.remaining_time = TOTAL_GAME_TIME
-        self.question_start_time = 0  # Initialize the question start time
-        self.min_num_operations = MIN_NUM_OPERATIONS  # Initial value
-        self.max_num_operations = MIN_NUM_OPERATIONS  # Initial value
         self.top_frame = tk.Frame(self.root, bg="black")
         self.top_frame.pack(fill=tk.BOTH, padx=10, pady=10)
         
         self.time_label = tk.Label(self.top_frame, text=f"Time: {self.remaining_time}", anchor='w', bg="black", fg="white")
         self.time_label.pack(side=tk.LEFT)
+        
+        self.score_label = tk.Label(self.top_frame, text="Correct: 0   Wrong: 0", anchor='e', bg="black", fg="white")
+        self.score_label.pack(side=tk.RIGHT)
         
         self.question_label = tk.Label(self.root, font=("Arial", 30), bg="black", fg="white")
         self.question_label.pack(pady=50, expand=True)
@@ -52,7 +50,7 @@ class MathTest:
         
         self.option_buttons = []
         for i in range(4):
-            btn = ttk.Button(self.buttons_frame, text="", command=lambda idx=i: self.check_answer(idx))
+            btn = tk.Button(self.buttons_frame, text="", command=lambda idx=i: self.check_answer(idx))
             btn.pack(side=tk.LEFT, padx=10)
             self.option_buttons.append(btn)
             
@@ -82,13 +80,12 @@ class MathTest:
     def generate_question(self):
         if self.remaining_time <= 0:
             return
-        
-        self.question_start_time = time.time()  # Record the time the question is displayed
         self.expression, self.answer = self.create_math_expression()
-        self.question_label.config(text=self.expression)        
+        self.question_label.config(text=self.expression)
+        
         options = [self.answer]
         while len(options) < 4:
-            option = random.randint(1, 100)
+            option = random.randint(1, 100)  # Adjusted the range to 100
             if option not in options:
                 options.append(option)
         random.shuffle(options)
@@ -102,7 +99,7 @@ class MathTest:
         while True:
             answer = random.randint(1, 99)
             operators = ['+', '-', '*', '/']
-            num_ops = random.randint(self.min_num_operations, self.max_num_operations)
+            num_ops = random.randint(MIN_NUM_OPERATIONS, MAX_NUM_OPERATIONS)
             ops = random.choices(operators, k=num_ops)
             nums = [random.randint(1, 99) for _ in range(num_ops+1)]
 
@@ -145,24 +142,16 @@ class MathTest:
 
     def check_answer(self, idx):
         self.total_questions += 1
-        answer_time = time.time() - self.question_start_time  # Calculate the time taken to answer
-        correct = idx == self.correct_option_idx  # Check if the answer is correct
-        self.adjust_difficulty(answer_time, correct)  # Adjust the difficulty based on answer time and correctness
-        if correct:
+        if idx == self.correct_option_idx:
             self.correct_count += 1
         else:
             self.wrong_count += 1
         self.update_score()
         self.write_data_to_csv(idx)
         self.generate_question()
-        
-    def adjust_difficulty(self, answer_time, correct):
-        if correct and answer_time < TIME_THRESHOLD:  # If answer is correct and within time threshold
-            self.max_num_operations = min(self.max_num_operations + DIFFICULTY_INCREMENT, MAX_NUM_OPERATIONS)
-            self.min_num_operations = self.max_num_operations-1
 
     def update_score(self):
-        pass
+        self.score_label.config(text=f"Correct: {self.correct_count}   Wrong: {self.wrong_count}")
 
     def end_game(self):
         self.question_label.config(text="Game Over")
