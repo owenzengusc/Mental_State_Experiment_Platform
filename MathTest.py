@@ -38,6 +38,7 @@ class MathTest:
         self.question_start_time = 0  # Initialize the question start time
         self.min_num_operations = MIN_NUM_OPERATIONS  # Initial value
         self.max_num_operations = MIN_NUM_OPERATIONS  # Initial value
+        self.prev_correct_option_idx = None
         self.top_frame = tk.Frame(self.root, bg="black")
         self.top_frame.pack(fill=tk.BOTH, padx=10, pady=10)
         
@@ -85,18 +86,25 @@ class MathTest:
         
         self.question_start_time = time.time()  # Record the time the question is displayed
         self.expression, self.answer = self.create_math_expression()
-        self.question_label.config(text=self.expression)        
+        self.question_label.config(text=self.expression)
+        
         options = [self.answer]
         while len(options) < 4:
             option = random.randint(1, 100)
             if option not in options:
                 options.append(option)
-        random.shuffle(options)
+        
+        # Shuffle the options until the correct answer is in a different position
+        while True:
+            random.shuffle(options)
+            self.correct_option_idx = options.index(self.answer)  # Get the index of the correct answer after shuffling
+            if self.correct_option_idx != self.prev_correct_option_idx:  # Check if it's different from the previous correct answer position
+                break  # If it is, break out of the loop
+        
+        self.prev_correct_option_idx = self.correct_option_idx  # Update the previous correct answer position
         
         for i, btn in enumerate(self.option_buttons):
             btn.config(text=str(options[i]), state=tk.NORMAL)
-            if options[i] == self.answer:
-                self.correct_option_idx = i
 
     def create_math_expression(self):
         while True:
