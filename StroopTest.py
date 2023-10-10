@@ -79,7 +79,7 @@ class StroopTest:
         self.buttons_frame.pack(pady=20)
         # Create the buttons
         for color_name in colors:
-            btn = tk.Button(self.buttons_frame, text=color_name)
+            btn = ttk.Button(self.buttons_frame, text=color_name)
             btn.pack(side=tk.LEFT, padx=10)
             btn.bind('<Button>', lambda event, cn=color_name: self.check_answer(cn))  # Bind the button press event
         # Start the countdown before the game begins
