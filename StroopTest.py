@@ -82,6 +82,7 @@ class StroopTest:
             btn = ttk.Button(self.buttons_frame, text=color_name)
             btn.pack(side=tk.LEFT, padx=10)
             btn.bind('<Button>', lambda event, cn=color_name: self.check_answer(cn))  # Bind the button press event
+
         # Start the countdown before the game begins
         self.countdown(COUNTDOWN_TIME)
         self.callback = callback 
@@ -102,7 +103,6 @@ class StroopTest:
         self.write_header_to_csv()
         self.update_timer()
         self.start_question_timer_thread()  # Use the new method to start the thread
-
 
     # Update the score
     def update_score(self):
