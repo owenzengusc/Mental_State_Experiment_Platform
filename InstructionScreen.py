@@ -24,7 +24,7 @@ class InstructionScreen:
             description_text = (
                 "You will be presented with a series of math expressions.\n"
                 "Your task is to solve them as quickly as possible.\n"
-                "Click on the correct answer from the given options.\n"
+                "RIGHT Click on the correct answer from the given options.\n"
                 "The test will last for a fixed duration."
             )
             example_text = "For example, if the expression is '5 + 3', you should select '8'."
@@ -32,7 +32,7 @@ class InstructionScreen:
             description_text = (
                 "Words will be displayed in various colors.\n"
                 "Your task is to select the COLOR of the word, not the word itself.\n"
-                "Click on the correct color as quickly as possible.\n"
+                "RIGHT Click on the correct color as quickly as possible.\n"
                 "The test will last for a fixed duration."
             )
             example_text = "For example, for the word "

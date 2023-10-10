@@ -3,7 +3,6 @@ from tkinter import ttk
 import random
 import csv
 import time
-import threading
 
 # Define the colors and their names
 colors = {
@@ -33,7 +32,6 @@ COUNTDOWN_TIME = 5
 # Path to the folder where the data will be stored
 PATH = './data/'
 
-
 class StroopTest:
     def __init__(self, root, username, callback=None):
         # Create a window
@@ -43,11 +41,6 @@ class StroopTest:
         # Initialize the game variables
         self.username = username
         self.start_time = time.time()
-        # Create a style object
-        style = ttk.Style()
-
-        # This will set all ttk.Button widgets to the 'flat' relief style
-        style.configure('TButton', relief='flat', padding=6)
         self.start_time_header = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
         self.path_to_file = PATH+'stroopTest_'+username+'.csv'
         self.correct_count = 0
@@ -79,14 +72,11 @@ class StroopTest:
         self.buttons_frame.pack(pady=20)
         # Create the buttons
         for color_name in colors:
-            btn = tk.Button(self.buttons_frame, text=color_name)
+            btn = ttk.Button(self.buttons_frame, text=color_name, command=lambda cn=color_name: self.check_answer(cn))
             btn.pack(side=tk.LEFT, padx=10)
-            btn.bind('<Button>', lambda event, cn=color_name: self.check_answer(cn))  # Bind the button press event
         # Start the countdown before the game begins
         self.countdown(COUNTDOWN_TIME)
         self.callback = callback 
-        self.question_timer_thread = None  # Add this line to create a placeholder for the thread
-        
         
     # Start the game after the countdown
     def countdown(self, count):
@@ -101,33 +91,12 @@ class StroopTest:
     def start_game(self):
         self.write_header_to_csv()
         self.update_timer()
-        self.start_question_timer_thread()  # Use the new method to start the thread
-
+        self.question_timer()
 
     # Update the score
     def update_score(self):
         #self.score_label.config(text=f"Correct: {self.correct_count}   Wrong: {self.wrong_count}   Miss: {self.miss_count}")
         pass
-
-    def start_question_timer_thread(self):
-        self.question_timer_thread = threading.Thread(target=self.question_timer_logic)
-        self.question_timer_thread.daemon = True  # Set daemon to True so the thread will exit when the main program exits
-        self.question_timer_thread.start()
-        
-    def question_timer_logic(self):
-        while self.remaining_time > 0:
-            if not self.answered:
-                self.total_questions += 1
-                self.miss_count += 1
-                self.update_score()
-                self.write_miss_to_csv()
-                self.label.config(text="", fg="black")
-                self.root.update()
-            self.answered = False
-            self.generate_question()
-            time.sleep(1 / self.current_frequency)  # Use time.sleep instead of self.root.after
-            self.current_frequency = min(self.current_frequency + INCREASE_RATE, MAX_QUESTION_FREQUENCY)
-
 
     # Update the timer
     def update_timer(self):

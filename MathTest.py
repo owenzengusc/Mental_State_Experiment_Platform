@@ -53,8 +53,9 @@ class MathTest:
         
         self.option_buttons = []
         for i in range(4):
-            btn = ttk.Button(self.buttons_frame, text="", command=lambda idx=i: self.check_answer(idx))
+            btn = ttk.Button(self.buttons_frame, text="")
             btn.pack(side=tk.LEFT, padx=10)
+            btn.bind('<Button>', lambda event, idx=i: self.check_answer(idx)) 
             self.option_buttons.append(btn)
             
         self.start_time = time.time()
