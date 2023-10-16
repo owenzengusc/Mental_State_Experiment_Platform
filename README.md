@@ -87,7 +87,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 **Using Anaconda Prompt:**
 
-1. If you have an environment, activate it:
+1. If you have an environment, activate it, otherwise continue to next step:
    ```
    activate <your-environment-name>
    ```
@@ -118,6 +118,64 @@ test_editor: A utility to modify, add, or delete tests.
    ```
    python3 main.py
    ```
+
+## Setting Up and Modifying the Test
+
+If you wish to set up and customize the test parameters, follow the steps below:
+
+### 1. Adjusting the Test Duration:
+
+Both the MathTest and StroopTest have a default duration of 3 minutes. To modify this:
+
+- Open MathTest.py or StroopTest.py.
+- Locate the line TOTAL_GAME_TIME = 60*3.
+- Change the 3 to your desired duration in minutes.
+
+### 2. Modifying the Math Test Parameters:
+
+In MathTest.py:
+
+- MAX_NUM_OPERATIONS and MIN_NUM_OPERATIONS: Adjust the range of operations in the math expression.
+- DIFFICULTY_INCREMENT: Control how much to increase the difficulty.
+- TIME_THRESHOLD: Set the time threshold for adjusting difficulty.
+- PARENTHESIS_PROBABILITY: Adjust the probability of including parentheses in the expression.
+
+### 3. Modifying the Stroop Test Parameters:
+
+In StroopTest.py:
+
+- QUESTION_FREQUENCY: Set the initial frequency of questions per second.
+- INCREASE_RATE: Control the rate at which the question frequency increases.
+- MAX_QUESTION_FREQUENCY: Set the maximum question frequency.
+
+4. **Adjusting Window and Test Duration Parameters in `main.py`:**
+In `main.py`, there are parameters that define the window dimensions and the average test duration. If you modify the test duration in the individual test files (`MathTest.py` or `StroopTest.py`), ensure you also update the `AVERAGE_TEST_DURATION` parameter (unit of minute) in `main.py` to reflect the changes.
+```python
+WINDOW_WIDTH = 1200
+WINDOW_HEIGHT = 1000
+TEST_WINDOW_WIDTH = 900
+TEST_WINDOW_HEIGHT = 700
+AVERAGE_TEST_DURATION = 5
+```
+
+
+## Using the Test Editor (test_editor.py)
+
+The test_editor.py script allows users to view, add, edit, or delete tests. Here's how to use it:
+
+1. Initialization: On the first run, the script checks for the existence of the test.json file in the test/ directory. If it doesn't exist or is invalid, the script will initialize a new JSON file with default values.
+
+2. View Tests: Enter 1 when prompted to view the list of tests.
+
+3. Add a Test: Enter 2 and provide the name of the test you want to add.
+
+4. Edit a Test: Enter 3, provide the test number you want to edit, and then provide the new test name.
+
+5. Delete a Test: Enter 4 and provide the test number you want to delete.
+
+6. Exit: Enter 5 to exit the script.
+
+Remember to always backup your test.json file before making any changes.
 
 ## Adding Python to PATH on Windows
 

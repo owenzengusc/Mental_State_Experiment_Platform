@@ -16,7 +16,7 @@ colors = {
 }
 
 # Total game time in seconds (3 minutes = 180 seconds)
-TOTAL_GAME_TIME = 1*3
+TOTAL_GAME_TIME = 60*3
 
 # Initial question frequency (number of questions per second). Value should be between 0 and 1.
 QUESTION_FREQUENCY = 0.5  # 1 question every second
