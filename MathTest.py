@@ -6,7 +6,7 @@ import time
 
 
 # Total game time in seconds
-TOTAL_GAME_TIME = 60*3
+TOTAL_GAME_TIME = 1*3
 
 # Define your constants outside the class
 MAX_NUM_OPERATIONS = 7  # Maximum number of operations
@@ -52,10 +52,12 @@ class MathTest:
         self.buttons_frame.pack(pady=20)
         
         self.option_buttons = []
+        
         for i in range(4):
             btn = ttk.Button(self.buttons_frame, text="")
             btn.pack(side=tk.LEFT, padx=10)
             btn.bind('<Button>', lambda event, idx=i: self.check_answer(idx)) 
+            btn.config (state=tk.DISABLED)
             self.option_buttons.append(btn)
             
         self.start_time = time.time()

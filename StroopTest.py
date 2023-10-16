@@ -16,7 +16,7 @@ colors = {
 }
 
 # Total game time in seconds (3 minutes = 180 seconds)
-TOTAL_GAME_TIME = 60*3
+TOTAL_GAME_TIME = 1*3
 
 # Initial question frequency (number of questions per second). Value should be between 0 and 1.
 QUESTION_FREQUENCY = 0.5  # 1 question every second
@@ -78,11 +78,6 @@ class StroopTest:
         self.buttons_frame = tk.Frame(self.root, bg="black")
         self.buttons_frame.pack(pady=20)
         # Create the buttons
-        for color_name in colors:
-            btn = ttk.Button(self.buttons_frame, text=color_name)
-            btn.pack(side=tk.LEFT, padx=10)
-            btn.bind('<Button>', lambda event, cn=color_name: self.check_answer(cn))  # Bind the button press event
-
         # Start the countdown before the game begins
         self.countdown(COUNTDOWN_TIME)
         self.callback = callback 
@@ -103,6 +98,10 @@ class StroopTest:
         self.write_header_to_csv()
         self.update_timer()
         self.start_question_timer_thread()  # Use the new method to start the thread
+        for color_name in colors:
+            btn = ttk.Button(self.buttons_frame, text=color_name)
+            btn.pack(side=tk.LEFT, padx=10)
+            btn.bind('<Button>', lambda event, cn=color_name: self.check_answer(cn))  # Bind the button press event
 
     # Update the score
     def update_score(self):

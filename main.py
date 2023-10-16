@@ -13,6 +13,8 @@ WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 1000
 TEST_WINDOW_WIDTH = 900
 TEST_WINDOW_HEIGHT = 700
+# INSTRUCTION_WINDOW_WIDTH = 800
+# INSTRUCTION_WINDOW_HEIGHT = 600
 AVERAGE_TEST_DURATION = 5
 
 def load_test_sequence():
@@ -21,7 +23,7 @@ def load_test_sequence():
         return data["Test_List"]
 
 def show_instruction_screen(test_name):
-    instruction_window = create_new_window(test_name, WINDOW_WIDTH, WINDOW_HEIGHT)
+    instruction_window = create_new_window(test_name, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT)
     if test_name == "StroopTest":
         app = InstructionScreen(instruction_window, "StroopTest", instruction_window.destroy)
     elif test_name == "MathTest":

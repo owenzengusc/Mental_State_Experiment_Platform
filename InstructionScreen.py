@@ -60,7 +60,10 @@ class InstructionScreen:
     def start_test(self):
         if self.callback:
             self.callback()
-        self.root.destroy()
+        try:
+            self.root.destroy()
+        except tk.TclError:
+            pass
 
 if __name__ == "__main__":
     root = tk.Tk()
