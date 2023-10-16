@@ -148,7 +148,8 @@ In StroopTest.py:
 - INCREASE_RATE: Control the rate at which the question frequency increases.
 - MAX_QUESTION_FREQUENCY: Set the maximum question frequency.
 
-4. **Adjusting Window and Test Duration Parameters in `main.py`:**
+### 4. Adjusting Window and Test Duration Parameters in `main.py:
+
 In `main.py`, there are parameters that define the window dimensions and the average test duration. If you modify the test duration in the individual test files (`MathTest.py` or `StroopTest.py`), ensure you also update the `AVERAGE_TEST_DURATION` parameter (unit of minute) in `main.py` to reflect the changes.
 ```python
 WINDOW_WIDTH = 1200
@@ -157,7 +158,6 @@ TEST_WINDOW_WIDTH = 900
 TEST_WINDOW_HEIGHT = 700
 AVERAGE_TEST_DURATION = 5
 ```
-
 
 ## Using the Test Editor (test_editor.py)
 
