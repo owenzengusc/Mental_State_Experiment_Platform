@@ -1,10 +1,10 @@
 # EEG Sensor Interface
 
-This project provides an interface for EEG sensor tests in Khan Lab @ USC. It allows users to participate in various tests, view instructions, and receive feedback based on their performance.
+This project provides an interface for EEG sensor tests in [Khan Lab @ USC](https://khan.usc.edu/). It allows users to participate in various tests, view instructions, and receive feedback based on their performance.
 
 ## Author
 
-- **Owen Zeng**: Sole developer and maintainer of this project. You can contact me at [owenzeng@usc.edu](owenzeng@usc.edu).
+- **Owen Zeng**: Sole developer and maintainer of this project. You can contact me at [owenzeng@usc.edu](mailto:owenzeng@usc.edu).
 
 ## Features
 
@@ -193,3 +193,7 @@ Now, you should be able to run Python from the Command Prompt, PowerShell, or an
 ## Contributing
 
 Contributions to this project are welcomed. To contribute, please fork the repository and submit your pull request.
+
+## Acknowledgments
+
+This EEG Sensor Interface project is a part of the larger "Precision Psychiatry" initiative led by [Munia Ferdoushi](mailto:ferdoush@usc.edu). I am grateful for the opportunity to work under her guidance and be a part of her research group at [Khan Lab @ USC](https://khan.usc.edu/) with Professor [Yasser Khan](mailto:yasser.khan@usc.edu). Her expertise and mentorship have been invaluable in the development and progression of this project.
