@@ -1,6 +1,10 @@
 # EEG Sensor Interface
 
-This project provides an interface for EEG sensor tests. It allows users to participate in various tests, view instructions, and receive feedback based on their performance.
+This project provides an interface for EEG sensor tests in Khan Lab @ USC. It allows users to participate in various tests, view instructions, and receive feedback based on their performance.
+
+## Author
+
+- **Owen Zeng**: Sole developer and maintainer of this project. You can contact me at [owenzeng@usc.edu](owenzeng@usc.edu).
 
 ## Features
 
@@ -30,7 +34,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone your-repo-link
+   git clone git@github.com:owenzengusc/EEG_Senor_Interface.git
    ```
 
 2. Navigate to the project directory:
@@ -51,7 +55,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone your-repo-link
+   git clone git@github.com:owenzengusc/EEG_Senor_Interface.git
    ```
 
 2. Navigate to the project directory:
@@ -68,7 +72,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone your-repo-link
+   git clone git@github.com:owenzengusc/EEG_Senor_Interface.git
    ```
 
 2. Navigate to the project directory:
@@ -85,7 +89,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. If you have an environment, activate it:
    ```
-   activate your-environment-name
+   activate <your-environment-name>
    ```
 
 2. Navigate to the project directory:
@@ -102,7 +106,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone your-repo-link
+   git clone git@github.com:owenzengusc/EEG_Senor_Interface.git
    ```
 
 2. Navigate to the project directory:
@@ -131,7 +135,3 @@ Now, you should be able to run Python from the Command Prompt, PowerShell, or an
 ## Contributing
 
 Contributions to this project are welcomed. To contribute, please fork the repository and submit your pull request.
-
-## License
-
-This project is licensed under the MIT License.
