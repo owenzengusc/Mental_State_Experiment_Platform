@@ -6,7 +6,7 @@ import time
 
 
 # Total game time in seconds
-TOTAL_GAME_TIME = 60*3
+TOTAL_GAME_TIME = 60*5
 
 # Define your constants outside the class
 MAX_NUM_OPERATIONS = 7  # Maximum number of operations
