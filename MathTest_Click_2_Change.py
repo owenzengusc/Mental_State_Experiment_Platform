@@ -4,14 +4,12 @@ import random
 import csv
 import time
 
-# Total game time in seconds
-TOTAL_GAME_TIME = 6
 
-# Time each question will be displayed in seconds
-QUESTION_DISPLAY_TIME = 6
+# Total game time in seconds
+TOTAL_GAME_TIME = 60*5
 
 # Define your constants outside the class
-MAX_NUM_OPERATIONS = 3  # Maximum number of operations
+MAX_NUM_OPERATIONS = 7  # Maximum number of operations
 MIN_NUM_OPERATIONS = 1  # Minimum number of operations
 DIFFICULTY_INCREMENT = 1  # How much to increment the difficulty by
 TIME_THRESHOLD = 20  # Set your time threshold here
@@ -35,15 +33,12 @@ class MathTest:
         self.path_to_file = PATH+'mathTest_'+username+'.csv'
         self.correct_count = 0
         self.wrong_count = 0
-        self.miss_count = 0
         self.total_questions = 0
         self.remaining_time = TOTAL_GAME_TIME
-        self.question_start_time = 0
-        self.min_num_operations = MIN_NUM_OPERATIONS
-        self.max_num_operations = MIN_NUM_OPERATIONS
+        self.question_start_time = 0  # Initialize the question start time
+        self.min_num_operations = MIN_NUM_OPERATIONS  # Initial value
+        self.max_num_operations = MIN_NUM_OPERATIONS  # Initial value
         self.prev_correct_option_idx = None
-        self.answered = True
-        self.current_timer_id = None
         self.top_frame = tk.Frame(self.root, bg="black")
         self.top_frame.pack(fill=tk.BOTH, padx=10, pady=10)
         
@@ -70,7 +65,7 @@ class MathTest:
         self.write_header_to_csv()
         self.countdown(COUNTDOWN)
         self.callback = callback
-
+        
     def countdown(self, count):
         if count > 0:
             self.question_label.config(text=str(count))
@@ -91,8 +86,8 @@ class MathTest:
     def generate_question(self):
         if self.remaining_time <= 0:
             return
-
-        self.question_start_time = time.time()
+        
+        self.question_start_time = time.time()  # Record the time the question is displayed
         self.expression, self.answer = self.create_math_expression()
         self.question_label.config(text=self.expression)
         
@@ -102,21 +97,17 @@ class MathTest:
             if option not in options:
                 options.append(option)
         
+        # Shuffle the options until the correct answer is in a different position
         while True:
             random.shuffle(options)
-            self.correct_option_idx = options.index(self.answer)
-            if self.correct_option_idx != self.prev_correct_option_idx:
-                break
-
-        self.prev_correct_option_idx = self.correct_option_idx
+            self.correct_option_idx = options.index(self.answer)  # Get the index of the correct answer after shuffling
+            if self.correct_option_idx != self.prev_correct_option_idx:  # Check if it's different from the previous correct answer position
+                break  # If it is, break out of the loop
+        
+        self.prev_correct_option_idx = self.correct_option_idx  # Update the previous correct answer position
         
         for i, btn in enumerate(self.option_buttons):
             btn.config(text=str(options[i]), state=tk.NORMAL)
-
-        self.answered = False
-        if self.current_timer_id:
-            self.root.after_cancel(self.current_timer_id)
-        self.current_timer_id = self.root.after(QUESTION_DISPLAY_TIME * 1000, self.hide_question)
 
     def create_math_expression(self):
         while True:
@@ -163,69 +154,35 @@ class MathTest:
             except:
                 pass
 
-
-
     def check_answer(self, idx):
-        self.answered = True
         self.total_questions += 1
-        if idx == self.correct_option_idx:
+        answer_time = time.time() - self.question_start_time  # Calculate the time taken to answer
+        correct = idx == self.correct_option_idx  # Check if the answer is correct
+        self.adjust_difficulty(answer_time, correct)  # Adjust the difficulty based on answer time and correctness
+        if correct:
             self.correct_count += 1
-            self.write_correct_to_csv()
-            # Increase difficulty
-            if self.max_num_operations < MAX_NUM_OPERATIONS:
-                self.max_num_operations += DIFFICULTY_INCREMENT
         else:
             self.wrong_count += 1
-            self.write_wrong_to_csv(idx)
+        self.update_score()
+        self.write_data_to_csv(idx)
         self.generate_question()
+        
+    def adjust_difficulty(self, answer_time, correct):
+        if correct and answer_time < TIME_THRESHOLD:  # If answer is correct and within time threshold
+            self.max_num_operations = min(self.max_num_operations + DIFFICULTY_INCREMENT, MAX_NUM_OPERATIONS)
+            self.min_num_operations = self.max_num_operations-1
 
-
-    def hide_question(self):
-        if not self.answered:
-            self.total_questions += 1
-            self.miss_count += 1
-            self.write_miss_to_csv()
-            self.generate_question()
+    def update_score(self):
+        pass
 
     def end_game(self):
-        # Cancel any scheduled tasks
-        if self.current_timer_id:
-            self.root.after_cancel(self.current_timer_id)
-        self.answered = True
-        self.question_label.config(text="Game Over!")
+        self.question_label.config(text="Game Over")
         for btn in self.option_buttons:
             btn.config(state=tk.DISABLED)
         self.write_summary_to_csv()
-        # close the window after 2s
         self.root.after(2000, self.root.destroy) 
         if self.callback:
             self.callback()
-
-    def write_header_to_csv(self):
-        with open(self.path_to_file, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["Timestamp", "Relative Time (ms)", "Expression", "Answer", "Selected Option", "Correctness", self.username])
-
-    def write_correct_to_csv(self):
-        current_time = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
-        relative_time = int((time.time() - self.start_time) * 1000)
-        with open(self.path_to_file, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([current_time, relative_time, self.expression, self.answer, self.answer, "CORRECT"])
-
-    def write_wrong_to_csv(self, idx):
-        current_time = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
-        relative_time = int((time.time() - self.start_time) * 1000)
-        with open(self.path_to_file, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([current_time, relative_time, self.expression, self.answer, self.option_buttons[idx].cget("text"), "WRONG"])
-
-    def write_miss_to_csv(self):
-        current_time = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
-        relative_time = int((time.time() - self.start_time) * 1000)
-        with open(self.path_to_file, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([current_time, relative_time, self.expression, self.answer, "MISS", "MISS"])
 
     def write_data_to_csv(self, user_choice_idx):
         current_time = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
@@ -234,9 +191,7 @@ class MathTest:
         result = "Correct" if user_choice == str(self.answer) else "Incorrect"
         with open(self.path_to_file, 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([current_time, relative_time, self.expression, self.answer, user_choice, result, self.username])
-
-
+            writer.writerow([current_time, relative_time, self.expression, self.answer, user_choice, result])
 
     def write_summary_to_csv(self):
         # Read the entire CSV file into memory
@@ -244,17 +199,40 @@ class MathTest:
             reader = csv.reader(readFile)
             lines = list(reader)
             # Insert the summary rows at the top
-            lines.insert(0, ["Start Time", "Total Questions", "Total Correct", "Total Wrong", "Total Miss", "Min Operation", "Max Operation", "Question Display Time (s)", self.username])
-            lines.insert(1, [self.start_time_header, self.total_questions, self.correct_count, self.wrong_count, self.miss_count, MIN_NUM_OPERATIONS, MAX_NUM_OPERATIONS, QUESTION_DISPLAY_TIME])
+            lines.insert(0, ["Start Time", "Total Questions", "Total Correct", "Total Wrong", "Min Operation", "Max Operation",self.username])
+            lines.insert(1, [self.start_time_header, self.total_questions, self.correct_count, self.wrong_count, MIN_NUM_OPERATIONS, MAX_NUM_OPERATIONS])
     
         # Write the modified content back to the CSV file
         with open(self.path_to_file, 'w', newline='') as writeFile:
             writer = csv.writer(writeFile)
             writer.writerows(lines)
-            writer.writerow(["Start Time", "Total Questions", "Total Correct", "Total Wrong", "Total Miss", "Min Operation", "Max Operation", "Question Display Time (s)", self.username])
-            writer.writerow([self.start_time_header, self.total_questions, self.correct_count, self.wrong_count, self.miss_count, MIN_NUM_OPERATIONS, MAX_NUM_OPERATIONS, QUESTION_DISPLAY_TIME])
+            writer.writerow(["Start Time", "Total Questions", "Total Correct", "Total Wrong", "Min Operation", "Max Operation", self.username])
+            writer.writerow([self.start_time_header, self.total_questions, self.correct_count, self.wrong_count, MIN_NUM_OPERATIONS, MAX_NUM_OPERATIONS])
 
+    def write_header_to_csv(self):
+        with open(self.path_to_file, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["Date Time", "Relative Time", "Expression", "Answer", "User Choice", "Result", self.username])
+           
 if __name__ == "__main__":
     root = tk.Tk()
-    app = MathTest(root, "testUser")
+    
+    # Fix the window size
+    root.minsize(800, 600)  # Set to your desired width and height
+    root.maxsize(800, 600)  # Set to your desired width and height
+
+    # Center the window
+    window_width = 800  # Set to your desired width
+    window_height = 600  # Set to your desired height
+
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+
+    x_coordinate = int((screen_width / 2) - (window_width / 2))
+    y_coordinate = int((screen_height / 2) - (window_height / 2))
+
+    root.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
+
+    username = input("Enter your name: ")
+    app = MathTest(root, username)
     root.mainloop()
