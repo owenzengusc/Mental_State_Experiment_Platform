@@ -1,4 +1,3 @@
-lib/
-include/
+testcode/
 pyvenv.cfg
 __pycache__/

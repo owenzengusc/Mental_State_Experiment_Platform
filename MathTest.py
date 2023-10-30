@@ -5,7 +5,7 @@ import csv
 import time
 
 # Total game time in seconds
-TOTAL_GAME_TIME = 6
+TOTAL_GAME_TIME = 60*3
 
 # Time each question will be displayed in seconds
 QUESTION_DISPLAY_TIME = 6
