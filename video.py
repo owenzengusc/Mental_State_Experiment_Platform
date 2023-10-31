@@ -59,8 +59,11 @@ class VideoFeedbackApp:
         self.root.withdraw()  # Hide the root window
         from moviepy.editor import VideoFileClip
         clip = VideoFileClip(video_path)
-        clipresized = clip.resize(height=700)
-        clipresized.preview()
+        #clipresized = clip.resize(height=700)
+        #clipresized.preview()
+        # show the clip in fullscreen
+        clip.preview(fullscreen=True)
+        #clip.preview()
         pygame.quit()  # Quit Pygame after the video ends
         self.collect_feedback()  # Collect feedback after the video ends
 
