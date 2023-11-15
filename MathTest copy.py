@@ -8,7 +8,7 @@ import time
 TOTAL_GAME_TIME = 60*3
 
 # Time each question will be displayed in seconds
-QUESTION_DISPLAY_TIME = 7
+QUESTION_DISPLAY_TIME = 6
 
 # Define your constants outside the class
 MAX_NUM_OPERATIONS = 3  # Maximum number of operations
@@ -131,28 +131,23 @@ class MathTest:
             operators = ['+', '-', '*', '/']
             num_ops = random.randint(self.min_num_operations, self.max_num_operations)
             ops = random.choices(operators, k=num_ops)
-
-            # Adjust the number generation based on the number of operations
-            if num_ops == 3:
-                # Choose a position for the two-digit number
-                two_digit_pos = random.randint(0, num_ops)
-                nums = [random.randint(10, 99) if i == two_digit_pos else random.randint(1, 9) for i in range(num_ops + 1)]
-            elif num_ops == 2:
-                # Logic for 2 operations
-                one_digit_pos = random.randint(0, num_ops)
-                nums = [random.randint(1, 9) if i == one_digit_pos else random.randint(10, 99) for i in range(num_ops + 1)]
-            else:
-                nums = [random.randint(1, 99) for _ in range(num_ops + 1)]
+            nums = [random.randint(1, 99) for _ in range(num_ops+1)]
 
             expression_parts = [str(nums[0])]
             for i in range(num_ops):
                 if ops[i] == '/':
-                    # Additional logic for division to ensure feasible calculations
-                    nums[i] = nums[i] * nums[i+1]
+                    if answer == 1:
+                        nums[i+1] = 2
+                    else:
+                        nums[i+1] = random.randint(2, min(99, answer))
+                    nums[i] = nums[i+1] * random.randint(1, 99)
                 elif ops[i] == '*':
-                    # Additional logic for multiplication, if needed
-                    pass
+                    if nums[i] == 1:
+                        nums[i] = random.randint(2, 99)
+                    elif nums[i+1] == 1:
+                        nums[i+1] = random.randint(2, 99)
                 expression_parts.extend([ops[i], str(nums[i+1])])
+
             expression = " ".join(expression_parts)
             expression_without_parentheses = expression
 
