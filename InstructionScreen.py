@@ -32,7 +32,7 @@ class InstructionScreen:
             description_text = (
                 "Words will be displayed in various colors.\n"
                 "Your task is to select the COLOR of the word, not the word itself.\n"
-                "RIGHT Click on the correct color as quickly as possible.\n"
+                "Click on the correct color on the keyboard as quickly as possible.\n"
                 "The test will last for a fixed duration."
             )
             example_text = "For example, for the word "
