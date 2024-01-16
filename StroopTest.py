@@ -19,13 +19,13 @@ colors = {
 TOTAL_GAME_TIME = 60*3
 
 # Initial question frequency (number of questions per second). Value should be between 0 and 1.
-QUESTION_FREQUENCY = 0.5  # 1 question every second
+QUESTION_FREQUENCY = 0.25  # 1 question every second
 
 # Rate at which the question frequency increases after each question
 INCREASE_RATE = 0.015
 
 # Maximum question frequency the game can reach
-MAX_QUESTION_FREQUENCY = 2  # 2 questions every second
+MAX_QUESTION_FREQUENCY = 1  # 2 questions every second
 
 # Time to wait before the game starts
 COUNTDOWN_TIME = 5
@@ -47,7 +47,7 @@ class StroopTest:
         style = ttk.Style()
 
         # This will set all ttk.Button widgets to the 'flat' relief style
-        style.configure('TButton', relief='flat', padding=6)
+        style.configure('TButton',font=('Arial', 31), relief='flat', padding=6)
         self.start_time_header = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
         self.path_to_file = PATH+'stroopTest_'+username+'.csv'
         self.correct_count = 0
@@ -72,7 +72,7 @@ class StroopTest:
         # self.score_label = tk.Label(self.top_frame, text="Correct: 0   Wrong: 0   Miss: 0", anchor='e', bg="black", fg="white")
         # self.score_label.pack(side=tk.RIGHT)
         # Create the question label in the middle
-        self.label = tk.Label(self.root, font=("Arial", 50), bg="black")
+        self.label = tk.Label(self.root, font=("Arial", 100), bg="black")
         self.label.pack(pady=100, expand=True)
         # Create the buttons frame at the bottom
         self.buttons_frame = tk.Frame(self.root, bg="black")
@@ -242,14 +242,16 @@ class StroopTest:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    
-    # Fix the window size
-    root.minsize(800, 600)  # Set to your desired width and height
-    root.maxsize(800, 600)  # Set to your desired width and height
+
 
     # Center the window
-    window_width = 800  # Set to your desired width
-    window_height = 600  # Set to your desired height
+    window_width = 1800  # Set to your desired width
+    window_height = 1000  # Set to your desired height
+
+        
+    # Fix the window size
+    root.minsize(window_width, window_height)  # Set to your desired width and height
+    root.maxsize(1960, 1080)  # Set to your desired width and height
 
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
@@ -259,6 +261,5 @@ if __name__ == "__main__":
 
     root.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
 
-    username = input("Enter your name: ")
-    app = StroopTest(root, username)
+    app = StroopTest(root, username="testUserStroop")
     root.mainloop()
