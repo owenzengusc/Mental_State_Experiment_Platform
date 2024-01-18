@@ -3,12 +3,13 @@ from tkinter import ttk
 import random
 import csv
 import time
+import threading
 
 # Total game time in seconds
 TOTAL_GAME_TIME = 60*3
 
 # Time each question will be displayed in seconds
-QUESTION_DISPLAY_TIME = 6
+QUESTION_DISPLAY_TIME = 7
 
 # Define your constants outside the class
 MAX_NUM_OPERATIONS = 3  # Maximum number of operations
@@ -75,6 +76,7 @@ class MathTest:
         self.start_time = time.time()
         self.start_time_header = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(self.start_time))
         self.write_header_to_csv()
+        self.play_music_thread()
         self.countdown(COUNTDOWN)
         self.callback = callback
 
@@ -86,7 +88,18 @@ class MathTest:
             self.question_label.config(text="")
             self.generate_question()
             self.update_timer()
-
+    
+    def play_music(self):
+        import pygame
+        pygame.mixer.init()
+        pygame.mixer.music.load("clock.mp3")
+        pygame.mixer.music.play(6)
+    
+    def play_music_thread(self):
+        self.play_music_thread = threading.Thread(target=self.play_music)
+        self.play_music_thread.daemon = True
+        self.play_music_thread.start()
+        
     def update_timer(self):
         if self.remaining_time > 0:
             self.remaining_time -= 1
@@ -131,23 +144,28 @@ class MathTest:
             operators = ['+', '-', '*', '/']
             num_ops = random.randint(self.min_num_operations, self.max_num_operations)
             ops = random.choices(operators, k=num_ops)
-            nums = [random.randint(1, 99) for _ in range(num_ops+1)]
+
+            # Adjust the number generation based on the number of operations
+            if num_ops == 3:
+                # Choose a position for the two-digit number
+                two_digit_pos = random.randint(0, num_ops)
+                nums = [random.randint(10, 99) if i == two_digit_pos else random.randint(1, 9) for i in range(num_ops + 1)]
+            elif num_ops == 2:
+                # Logic for 2 operations
+                one_digit_pos = random.randint(0, num_ops)
+                nums = [random.randint(1, 9) if i == one_digit_pos else random.randint(10, 99) for i in range(num_ops + 1)]
+            else:
+                nums = [random.randint(1, 99) for _ in range(num_ops + 1)]
 
             expression_parts = [str(nums[0])]
             for i in range(num_ops):
                 if ops[i] == '/':
-                    if answer == 1:
-                        nums[i+1] = 2
-                    else:
-                        nums[i+1] = random.randint(2, min(99, answer))
-                    nums[i] = nums[i+1] * random.randint(1, 99)
+                    # Additional logic for division to ensure feasible calculations
+                    nums[i] = nums[i] * nums[i+1]
                 elif ops[i] == '*':
-                    if nums[i] == 1:
-                        nums[i] = random.randint(2, 99)
-                    elif nums[i+1] == 1:
-                        nums[i+1] = random.randint(2, 99)
+                    # Additional logic for multiplication, if needed
+                    pass
                 expression_parts.extend([ops[i], str(nums[i+1])])
-
             expression = " ".join(expression_parts)
             expression_without_parentheses = expression
 

@@ -121,7 +121,7 @@ class StroopTest:
         import pygame
         pygame.mixer.init()
         pygame.mixer.music.load("clock.mp3")
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(6)
 
     def play_music_thread(self):
         self.play_music_thread = threading.Thread(target=self.play_music)
