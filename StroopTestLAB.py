@@ -98,6 +98,7 @@ class StroopTest:
         self.write_header_to_csv()
         self.update_timer()
         self.start_question_timer_thread()  # Use the new method to start the thread
+        self.play_music_thread()
 
         # Bind keys to their respective color answers
         self.root.bind('q', lambda event: self.check_answer("Green"))
@@ -114,6 +115,19 @@ class StroopTest:
         self.question_timer_thread = threading.Thread(target=self.question_timer_logic)
         self.question_timer_thread.daemon = True  # Set daemon to True so the thread will exit when the main program exits
         self.question_timer_thread.start()
+
+    # Thread to play music when the game starts
+    def play_music(self):
+        import pygame
+        pygame.mixer.init()
+        pygame.mixer.music.load("clock.mp3")
+        pygame.mixer.music.play()
+
+    def play_music_thread(self):
+        self.play_music_thread = threading.Thread(target=self.play_music)
+        self.play_music_thread.daemon = True
+        self.play_music_thread.start()
+
         
     def question_timer_logic(self):
         while self.remaining_time > 0:
