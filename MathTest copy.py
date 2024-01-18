@@ -3,7 +3,6 @@ from tkinter import ttk
 import random
 import csv
 import time
-import threading
 
 # Total game time in seconds
 TOTAL_GAME_TIME = 60*3
@@ -76,7 +75,6 @@ class MathTest:
         self.start_time = time.time()
         self.start_time_header = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(self.start_time))
         self.write_header_to_csv()
-        self.play_music_thread()
         self.countdown(COUNTDOWN)
         self.callback = callback
 
@@ -88,18 +86,7 @@ class MathTest:
             self.question_label.config(text="")
             self.generate_question()
             self.update_timer()
-    
-    def play_music(self):
-        import pygame
-        pygame.mixer.init()
-        pygame.mixer.music.load("clock.mp3")
-        pygame.mixer.music.play(6)
-    
-    def play_music_thread(self):
-        self.play_music_thread = threading.Thread(target=self.play_music)
-        self.play_music_thread.daemon = True
-        self.play_music_thread.start()
-        
+
     def update_timer(self):
         if self.remaining_time > 0:
             self.remaining_time -= 1

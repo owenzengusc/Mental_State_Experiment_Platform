@@ -11,8 +11,8 @@ colors = {
     "Blue": "blue",
     "Green": "green",
     "Yellow": "yellow",
-    #"Purple": "purple",
-    #"Orange": "orange"
+    "Purple": "purple",
+    "Orange": "orange"
 }
 
 # Total game time in seconds (3 minutes = 180 seconds)
@@ -25,7 +25,7 @@ QUESTION_FREQUENCY = 0.25  # 1 question every second
 INCREASE_RATE = 0.015
 
 # Maximum question frequency the game can reach
-MAX_QUESTION_FREQUENCY = 0.75  # 2 questions every second
+MAX_QUESTION_FREQUENCY = 1  # 2 questions every second
 
 # Time to wait before the game starts
 COUNTDOWN_TIME = 5
@@ -72,7 +72,7 @@ class StroopTest:
         # self.score_label = tk.Label(self.top_frame, text="Correct: 0   Wrong: 0   Miss: 0", anchor='e', bg="black", fg="white")
         # self.score_label.pack(side=tk.RIGHT)
         # Create the question label in the middle
-        self.label = tk.Label(self.root, font=("Arial", 200), bg="black")
+        self.label = tk.Label(self.root, font=("Arial", 100), bg="black")
         self.label.pack(pady=100, expand=True)
         # Create the buttons frame at the bottom
         self.buttons_frame = tk.Frame(self.root, bg="black")
@@ -98,13 +98,10 @@ class StroopTest:
         self.write_header_to_csv()
         self.update_timer()
         self.start_question_timer_thread()  # Use the new method to start the thread
-        self.play_music_thread()
-
-        # Bind keys to their respective color answers
-        self.root.bind('q', lambda event: self.check_answer("Green"))
-        self.root.bind('w', lambda event: self.check_answer("Red"))
-        self.root.bind('e', lambda event: self.check_answer("Yellow"))
-        self.root.bind('r', lambda event: self.check_answer("Blue"))
+        for color_name in colors:
+            btn = ttk.Button(self.buttons_frame, text=color_name)
+            btn.pack(side=tk.LEFT, padx=10)
+            btn.bind('<Button>', lambda event, cn=color_name: self.check_answer(cn))  # Bind the button press event
 
     # Update the score
     def update_score(self):
@@ -115,19 +112,6 @@ class StroopTest:
         self.question_timer_thread = threading.Thread(target=self.question_timer_logic)
         self.question_timer_thread.daemon = True  # Set daemon to True so the thread will exit when the main program exits
         self.question_timer_thread.start()
-
-    # Thread to play music when the game starts
-    def play_music(self):
-        import pygame
-        pygame.mixer.init()
-        pygame.mixer.music.load("clock.mp3")
-        pygame.mixer.music.play(6)
-
-    def play_music_thread(self):
-        self.play_music_thread = threading.Thread(target=self.play_music)
-        self.play_music_thread.daemon = True
-        self.play_music_thread.start()
-
         
     def question_timer_logic(self):
         while self.remaining_time > 0:
