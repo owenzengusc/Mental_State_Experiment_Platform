@@ -28,21 +28,30 @@ class VideoFeedbackApp:
     def init_ui(self):
         # Create labels and happiness scale here and initially hide them
         self.root.title("Video Feedback")
-        self.root.geometry("800x600")  # Set the size of the root window
-        # Center the root window on the screen
-        self.root.geometry(f"800x600+{(self.root.winfo_screenwidth() - 800) // 2}+{(self.root.winfo_screenheight() - 600) // 2}")
-        self.happiness_scale = tk.Scale(self.root, from_=-10, to=10, orient=tk.HORIZONTAL, label="Happiness Level")
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        window_width = 1800
+        window_height = 1000
+        x = (screen_width / 2) - (window_width / 2)
+        y = (screen_height / 2) - (window_height / 2)
+        self.root.geometry(f"{window_width}x{window_height}+{int(x)}+{int(y)}")
+        self.happiness_scale = tk.Scale(self.root, from_=-10, to=10, orient=tk.HORIZONTAL, label="Happiness Level", length=600, font=("Arial", 30))
         self.happiness_scale.set(0)  # Set the initial value to 0 (neutral)
         self.happiness_scale.pack()
-        tk.Label(self.root, text="Unhappy (-10), Neutral (0), Happy (10)").pack()
-        self.next_button = tk.Button(self.root, text="Next", command=self.next_video)
+        tk.Label(self.root, text="Unhappy (-10), Neutral (0), Happy (10)", font=("Arial", 30)).pack()
+        self.next_button = tk.Button(self.root, text="Next", command=self.next_video, font=("Arial", 30))
         self.next_button.pack()
         self.root.withdraw()  # Hide the root window
 
     def show_instruction_screen(self):
         self.instruction_root = tk.Toplevel(self.root)
-        # Center the instruction window on the screen
-        self.instruction_root.geometry(f"800x600+{(self.instruction_root.winfo_screenwidth() - 800) // 2}+{(self.instruction_root.winfo_screenheight() - 600) // 2}")
+        screen_width = self.instruction_root.winfo_screenwidth()
+        screen_height = self.instruction_root.winfo_screenheight()
+        window_width = 1800
+        window_height = 1000
+        x = (screen_width / 2) - (window_width / 2)
+        y = (screen_height / 2) - (window_height / 2)
+        self.instruction_root.geometry(f"{window_width}x{window_height}+{int(x)}+{int(y)}")
         InstructionScreen(self.instruction_root, "VideoFeedback", self.start_test)
 
     def start_test(self):

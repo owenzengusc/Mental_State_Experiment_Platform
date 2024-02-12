@@ -6,11 +6,11 @@ class InstructionScreen:
         self.callback = callback
         
         # Styling
-        self.bg_color = "#282c34"  # Dark background color
-        self.fg_color = "#a9b2c1"  # Light foreground color
-        self.btn_color = "#4a90e2"  # Button color
-        self.font_large = ("Arial", 20)
-        self.font_medium = ("Arial", 16)
+        self.bg_color = "#CCE2CB"  # Dark background color
+        self.fg_color = "Black"  # Light foreground color
+        self.btn_color = "#97C1A9"  # Button color
+        self.font_large = ("Arial", 55)
+        self.font_medium = ("Arial", 45)
         
         self.root.title(test_type+" Instructions")
         self.root.configure(bg=self.bg_color)
@@ -69,7 +69,7 @@ class InstructionScreen:
             self.example_continue_label.pack(side=tk.LEFT)
         
         # Start button
-        self.start_button = tk.Button(root, text="Start", font=self.font_medium, bg=self.btn_color, fg=self.bg_color, command=self.start_test)
+        self.start_button = tk.Button(root, text="Start", font=self.font_medium, bg=self.btn_color, fg="Black", command=self.start_test)
         self.start_button.pack(pady=20)
 
     def start_test(self):

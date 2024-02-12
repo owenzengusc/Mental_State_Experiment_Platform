@@ -12,11 +12,14 @@ class RelaxationScreen:
         # Setup window size and position
         screen_width = self.master.winfo_screenwidth()
         screen_height = self.master.winfo_screenheight()
-        window_width = 1000
-        window_height = 500
+        window_width = 1800
+        window_height = 1000
         x = (screen_width / 2) - (window_width / 2)
         y = (screen_height / 2) - (window_height / 2)
         self.master.geometry(f"{window_width}x{window_height}+{int(x)}+{int(y)}")
+
+        # change the background color
+        self.master.configure(bg="#97C1A9")
 
         pygame.mixer.init()
         self.play_music('relax.mp3')
@@ -25,11 +28,11 @@ class RelaxationScreen:
         self.update_countdown()  # Start the countdown
 
     def setup_gui(self):
-        self.label = tk.Label(self.master, text="Please close your eyes and relax.", font=("Arial", 40))
+        self.label = tk.Label(self.master, text="Please close your eyes and relax", font=("Arial", 70), bg="#97C1A9")
         self.label.pack(pady=20)
 
         # Initialize countdown label with the correct starting duration
-        self.countdown_label = tk.Label(self.master, text=f"{self.duration}", font=("Arial", 65))
+        self.countdown_label = tk.Label(self.master, text="Time Remaining: "+f"{self.duration}"+"s", font=("Arial", 65), bg="#97C1A9")
         self.countdown_label.pack(pady=10)
 
     def play_music(self, file_path):
@@ -38,7 +41,8 @@ class RelaxationScreen:
 
     def update_countdown(self):
         if self.duration > 0:
-            self.countdown_label.config(text=f"{self.duration}")
+            # Update the label to include the full text with the remaining time
+            self.countdown_label.config(text="Time Remaining: " + f"{self.duration}" + "s")
             self.duration -= 1
             self.master.after(1000, self.update_countdown)
         else:
@@ -46,7 +50,9 @@ class RelaxationScreen:
 
     def stop_music_and_close(self):
         pygame.mixer.music.stop()
-        self.master.destroy()
+        self.play_music("OpenEyes.mp3")
+        self.master.after(1800, pygame.mixer.music.stop)
+        self.master.after(2000, self.master.destroy)
 
     def on_close(self):
         self.stop_music_and_close()

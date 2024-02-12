@@ -9,21 +9,26 @@ class FeedbackScreen:
         self.root = root
         self.username = username
         self.path_to_file = PATH + 'feedback.csv'
-        
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        window_width = 1800
+        window_height = 1000
+        x = (screen_width / 2) - (window_width / 2)
+        y = (screen_height / 2) - (window_height / 2)
+        self.root.geometry(f"{window_width}x{window_height}+{int(x)}+{int(y)}")
         self.root.title("Feedback Screen")
-        
-        self.label = tk.Label(root, text="Please rate the experiment from 1-5 and provide your feedback:")
+        self.label = tk.Label(root, text="Please rate the experiment from 1-5 and provide your feedback:", font=("Arial", 40))
         self.label.pack(pady=10)
         
         self.rating_var = tk.IntVar()
         for i in range(1, 6):
-            rb = tk.Radiobutton(root, text=str(i), variable=self.rating_var, value=i)
+            rb = tk.Radiobutton(root, text=str(i), variable=self.rating_var, value=i, font=("Arial", 30))
             rb.pack(side=tk.LEFT, padx=5)
         
         self.feedback_entry = tk.Text(root, height=5, width=40)
         self.feedback_entry.pack(pady=10)
         
-        self.submit_button = tk.Button(root, text="Submit", command=self.submit_feedback)
+        self.submit_button = tk.Button(root, text="Submit", command=self.submit_feedback, font=("Arial", 30))
         self.submit_button.pack(pady=10)
         
         self.callback = callback

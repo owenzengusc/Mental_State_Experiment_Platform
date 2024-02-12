@@ -20,23 +20,31 @@ class ColdPressureTest:
         self.countdown_label.pack(pady=10)
 
     def start_initial_relaxation(self):
-        self.label.config(text="Please relax and close your eyes.")
-        self.start_countdown(1.8, self.play_cpt_instruction)  # 3 minutes
+        self.master.configure(bg="#97C1A9")
+        self.label.config(text="Please close your eyes and relax \n until next instruction", bg="#97C1A9")
+        self.countdown_label.config(bg="#97C1A9")
+        self.start_countdown(18, self.play_cpt_instruction)  # 3 minutes
         self.play_audio('relax.mp3')
 
     def play_cpt_instruction(self):
-        self.label.config(text="Please put and keep \n your hand in iced water now.")
-        self.start_countdown(1.8, self.end_instruction)  # 3 minutes for CPT
+        self.master.configure(bg="White")
+        self.label.config(text="Please put and keep \n your hand in iced water now.", bg="White")
+        self.countdown_label.config(bg="White")
+        self.start_countdown(18, self.end_instruction)  # 3 minutes for CPT
         self.play_audio('CPT.mp3')
+        self.wait_and_play_next('clock.mp3')
 
     def end_instruction(self):
-        self.label.config(text="You can remove your hand now.")
-        self.countdown_label.config(text="")
+        self.master.configure(bg="#97C1A9")
+        self.label.config(text="You can remove your hand now.", bg="#97C1A9")
+        self.countdown_label.config(text="", bg="#97C1A9")
+        pygame.mixer.music.stop()
+        self.play_audio('RemoveHand.mp3')
         self.master.after(5000, self.start_post_test_relaxation)  # 5 seconds
 
     def start_post_test_relaxation(self):
         self.label.config(text="Please relax and close your eyes.")
-        self.start_countdown(1.7, self.test_complete)  # 175 seconds
+        self.start_countdown(17, self.test_complete)  # 175 seconds
         self.play_audio('relax.mp3')
 
     def test_complete(self):
@@ -47,21 +55,34 @@ class ColdPressureTest:
 
     def play_audio(self, file_path):
         pygame.mixer.music.load(file_path)
-        pygame.mixer.music.play()
+        if file_path == 'clock.mp3':
+            pygame.mixer.music.play(10) # Play 10 times
+        else:
+            pygame.mixer.music.play()
+
+    def wait_and_play_next(self, next_track):
+        def check_music():
+            if not pygame.mixer.music.get_busy():
+                self.play_audio(next_track)
+            else:
+                # Check again after a short delay
+                self.master.after(100, check_music)
+        check_music()
 
     def start_countdown(self, duration, callback):
         def countdown(time_left=duration):
             if time_left <= 0:
                 callback()
             else:
-                self.countdown_label.config(text=str(time_left))
+                self.countdown_label.config(text="Time Remaining: " + f"{time_left}" + "s")
                 self.master.after(1000, countdown, time_left-1)
         countdown()
+    
 
 def show_cold_pressure_test():
     root = tk.Tk()
-    window_width = 1000
-    window_height = 800
+    window_width = 1800
+    window_height = 1000
 
     # Get the screen dimension
     screen_width = root.winfo_screenwidth()

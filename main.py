@@ -95,6 +95,7 @@ def main():
         ppl.name = user_name
         windw.destroy()
         show_relaxation_screen(duration=180)  # 3 minutes
+        
         execute_sequence(choice, ppl)
 
     while True:
