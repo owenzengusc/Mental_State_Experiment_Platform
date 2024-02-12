@@ -44,6 +44,13 @@ class InstructionScreen:
                 "Please be as honest and accurate as possible in your ratings."
             )
             example_text = ""
+        elif test_type == "ColdPressureTest":
+            description_text = (
+                "You will be asked to put your hand in iced water for a fixed duration.\n"
+                "Please follow the instructions provided during the test.\n"
+                "The test will last for a fixed duration."
+            )
+            example_text = ""
         
         self.description_label = tk.Label(root, text=description_text, font=self.font_medium, bg=self.bg_color, fg=self.fg_color, justify=tk.LEFT)
         self.description_label.pack(pady=20)
