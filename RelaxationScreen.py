@@ -28,7 +28,7 @@ class RelaxationScreen:
         self.update_countdown()  # Start the countdown
 
     def setup_gui(self):
-        self.label = tk.Label(self.master, text="Please close your eyes and relax", font=("Arial", 70), bg="#97C1A9")
+        self.label = tk.Label(self.master, text="Please close your eyes and relax \n until next instruction", font=("Arial", 70), bg="#97C1A9")
         self.label.pack(pady=20)
 
         # Initialize countdown label with the correct starting duration
