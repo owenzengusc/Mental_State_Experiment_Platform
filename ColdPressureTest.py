@@ -45,14 +45,14 @@ class ColdPressureTest:
         self.master.configure(bg="#97C1A9")
         self.label.config(text="Please close your eyes and relax \n until next instruction", bg="#97C1A9")
         self.countdown_label.config(bg="#97C1A9")
-        self.start_countdown(18, self.play_cpt_instruction)  # 3 minutes
+        self.start_countdown(self.first_relaxation_duration, self.play_cpt_instruction)  # 3 minutes
         self.play_audio('relax.mp3')
 
     def play_cpt_instruction(self):
         self.master.configure(bg="White")
         self.label.config(text="Please put and keep \n your hand in iced water now.", bg="White")
         self.countdown_label.config(bg="White")
-        self.start_countdown(18, self.end_instruction)  # 3 minutes for CPT
+        self.start_countdown(self.test_duration, self.end_instruction)  # 3 minutes for CPT
         self.play_audio('CPT.mp3')
         self.wait_and_play_next('clock.mp3')
 
@@ -66,7 +66,7 @@ class ColdPressureTest:
 
     def start_post_test_relaxation(self):
         self.label.config(text="Please relax and close your eyes.")
-        self.start_countdown(17, self.test_complete)  # 175 seconds
+        self.start_countdown(self.post_test_relaxation_duration, self.test_complete)  # 175 seconds
         self.play_audio('relax.mp3')
 
     def test_complete(self):
