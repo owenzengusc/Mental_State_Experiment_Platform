@@ -10,9 +10,9 @@ class ColdPressureTest:
         self.master.title("Cold Pressure Test")
         pygame.mixer.init()
         self.username = username
-        self.first_relaxation_duration = 10  # 3 minutes 180
-        self.test_duration = 10 # 3 minutes 180
-        self.post_test_relaxation_duration = 10  # 2 minutes 55 seconds 5 seconds for hand removal 175
+        self.first_relaxation_duration = 180  # 3 minutes 180
+        self.test_duration = 180 # 3 minutes 180
+        self.post_test_relaxation_duration = 175  # 2 minutes 55 seconds 5 seconds for hand removal 175
         self.StartTime = None
         self.EndTime = None
         self.setup_gui()
