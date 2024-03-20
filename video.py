@@ -5,6 +5,7 @@ from InstructionScreen import InstructionScreen
 from FeedbackScreen import FeedbackScreen
 import csv
 import time
+from datetime import datetime
 
 PATH = './data/'
 
@@ -19,6 +20,9 @@ class VideoFeedbackApp:
         self.start_time = time.time()
         self.start_time_header = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(self.start_time))
         self.write_header_to_csv()
+        self.StartTime = None
+        self.EndTime = None
+        self.Vcount = 0
 
         # Initialize UI elements but keep them hidden
         self.init_ui()
@@ -42,6 +46,26 @@ class VideoFeedbackApp:
         self.next_button = tk.Button(self.root, text="Next", command=self.next_video, font=("Arial", 30))
         self.next_button.pack()
         self.root.withdraw()  # Hide the root window
+        
+    def log_event(self, event_name, start_time, end_time, duration, username='New_User'):
+        log_data_path = f'./data/log_{username}.csv'
+
+        # Convert start_time and end_time to strings with milliseconds only if they are not None
+        start_time_str = start_time.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3] if start_time else ''
+        end_time_str = end_time.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3] if end_time else ''
+
+        # Check if the file exists and write headers if it's new
+        try:
+            with open(log_data_path, 'x', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Event', 'Start Time', 'End Time', 'Duration (milliseconds)'])
+        except FileExistsError:
+            pass  # File already exists, append to it without writing headers
+
+        # Write the event data
+        with open(log_data_path, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([event_name, start_time_str, end_time_str, duration])
 
     def show_instruction_screen(self):
         self.instruction_root = tk.Toplevel(self.root)
@@ -68,12 +92,20 @@ class VideoFeedbackApp:
         self.root.withdraw()  # Hide the root window
         from moviepy.editor import VideoFileClip
         clip = VideoFileClip(video_path)
+        self.Vcount += 1
         #clipresized = clip.resize(height=700)
         #clipresized.preview()
+        # Log the start of the video
+        self.StartTime = datetime.now()
+        self.log_event(f'Video {self.Vcount} Start', self.StartTime, None, None, username=self.username)
         # show the clip in fullscreen
         clip.preview(fullscreen=True)
         #clip.preview()
         pygame.quit()  # Quit Pygame after the video ends
+        # Log the end of the video
+        self.EndTime = datetime.now()
+        duration = int((self.EndTime - self.StartTime).total_seconds() * 1000)
+        self.log_event(f'Video {self.Vcount} End', self.StartTime, self.EndTime, duration, username=self.username)
         self.collect_feedback()  # Collect feedback after the video ends
 
     def play_next_video(self):
