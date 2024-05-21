@@ -1,6 +1,6 @@
 # EEG_Sensor_Interface
 # Owen Zeng
-# https://github.com/owenzengusc/EEG_Senor_Interface.git
+# https://github.com/owenzengusc/EEG_TEST_Interface.git
 from window import *
 from user import *
 from StroopTest import *
