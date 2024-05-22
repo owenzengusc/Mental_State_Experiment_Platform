@@ -1,6 +1,6 @@
 # Stress Test Interface
 
-This project provides an interface for EEG sensor tests in [Khan Lab @ USC](https://khan.usc.edu/). It allows users to participate in various tests, view instructions, and receive feedback based on their performance.
+This project provides an interface for tests in [Khan Lab @ USC](https://khan.usc.edu/). It allows users to participate in various tests, view instructions, and receive feedback based on their performance.
 
 ## Author
 
@@ -36,12 +36,12 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone git@github.com:owenzengusc/EEG_Senor_Interface.git
+   git clone git@github.com:owenzengusc/Stress_Test_Interface.git
    ```
 
 2. Navigate to the project directory:
    ```
-   cd EEG_Senor_Interface
+   cd Stress_Test_Interface
    ```
 
 3. Run the main script:
@@ -57,12 +57,12 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone git@github.com:owenzengusc/EEG_Senor_Interface.git
+   git clone git@github.com:owenzengusc/Stress_Test_Interface.git
    ```
 
 2. Navigate to the project directory:
    ```
-   cd EEG_Senor_Interface
+   cd Stress_Test_Interface
    ```
 
 3. Run the main script:
@@ -74,12 +74,12 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone git@github.com:owenzengusc/EEG_Senor_Interface.git
+   git clone git@github.com:owenzengusc/Stress_Test_Interface.git
    ```
 
 2. Navigate to the project directory:
    ```
-   cd EEG_Senor_Interface
+   cd Stress_Test_Interface
    ```
 
 3. Run the main script:
@@ -96,7 +96,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 2. Navigate to the project directory:
    ```
-   cd EEG_Senor_Interface
+   cd Stress_Test_Interface
    ```
 
 3. Run the main script:
@@ -108,12 +108,12 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone git@github.com:owenzengusc/EEG_Senor_Interface.git
+   git clone git@github.com:owenzengusc/Stress_Test_Interface.git
    ```
 
 2. Navigate to the project directory:
    ```
-   cd EEG_Senor_Interface
+   cd Stress_Test_Interface
    ```
 
 3. Run the main script:
