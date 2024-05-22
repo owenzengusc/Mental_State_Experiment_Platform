@@ -1,4 +1,4 @@
-# EEG Sensor Interface
+# Stress Test Interface
 
 This project provides an interface for EEG sensor tests in [Khan Lab @ USC](https://khan.usc.edu/). It allows users to participate in various tests, view instructions, and receive feedback based on their performance.
 
