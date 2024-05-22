@@ -221,4 +221,4 @@ Contributions to this project are welcomed. To contribute, please fork the repos
 
 ## Acknowledgments
 
-This EEG Sensor Interface project is a part of the larger "Precision Psychiatry" initiative led by [Munia Ferdoushi](mailto:ferdoush@usc.edu). I am grateful for the opportunity to work under her guidance and be a part of her research group at [Khan Lab @ USC](https://khan.usc.edu/) with Professor [Yasser Khan](mailto:yasser.khan@usc.edu). Her expertise and mentorship have been invaluable in the development and progression of this project.
+This project is a part of the larger "Cognitive Stress Evaluation and Prediction" initiative led by [Munia Ferdoushi](mailto:ferdoush@usc.edu). I am grateful for the opportunity to work under her guidance and be a part of her research group at [Khan Lab @ USC](https://khan.usc.edu/) with Professor [Yasser Khan](mailto:yasser.khan@usc.edu). Her expertise and mentorship have been invaluable in the development and progression of this project.
