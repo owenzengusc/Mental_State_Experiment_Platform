@@ -13,7 +13,8 @@ This project provides an interface for EEG sensor tests in [Khan Lab @ USC](http
 - **Feedback Screen**: Displays feedback to the user after completing a test.
 - **Instruction Screen**: Provides instructions to the user before starting a test.
 - **Test Editor**: Allows users to modify, add, or delete tests.
-- **Supported Tests**: Currently supports `MathTest` and `StroopTest`.
+- **Supported Tests**: Currently supports `MathTest`, `StroopTest`, and `ColdPressorTest`.
+- **Logging Function**: Logs events with timestamps and durations to CSV files, covering the entire testing process.
 
 ## File Structure
 
@@ -24,6 +25,7 @@ InstructionScreen.py: Displays instructions before each test.
 main.py: The main entry point for the application.
 MathTest.py: Logic and interface for the Math Test.
 StroopTest.py: Logic and interface for the Stroop Test.
+ColdPressorTest.py: Logic and interface for the Cold Pressor Test.
 user.py: User-related functionalities.
 window.py: Basic window creation and management functions.
 test_editor: A utility to modify, add, or delete tests.
@@ -148,7 +150,15 @@ In StroopTest.py:
 - INCREASE_RATE: Control the rate at which the question frequency increases.
 - MAX_QUESTION_FREQUENCY: Set the maximum question frequency.
 
-### 4. Adjusting Window and Test Duration Parameters in `main.py:
+### 4. Modifying the Cold Pressor Test Parameters
+
+In `ColdPressorTest.py`, you can adjust the durations of different phases of the test:
+
+- `first_relaxation_duration`: Initial relaxation duration before the test starts (in seconds). Default is 180 seconds (3 minutes).
+- `test_duration`: Duration for which the user keeps their hand in cold water (in seconds). Default is 180 seconds (3 minutes).
+- `post_test_relaxation_duration`: Post-test relaxation duration (in seconds). Default is 175 seconds to accommodate a 5-second recording, making a total of 3 minutes.
+
+### 5. Adjusting Window and Test Duration Parameters in `main.py:
 
 In `main.py`, there are parameters that define the window dimensions and the average test duration. If you modify the test duration in the individual test files (`MathTest.py` or `StroopTest.py`), ensure you also update the `AVERAGE_TEST_DURATION` parameter (unit of minute) in `main.py` to reflect the changes.
 ```python
@@ -158,24 +168,39 @@ TEST_WINDOW_WIDTH = 900
 TEST_WINDOW_HEIGHT = 700
 AVERAGE_TEST_DURATION = 5
 ```
+## Logging Function
 
-## Using the Test Editor (test_editor.py)
+The logging function logs events with timestamps and durations in a CSV file named after the user's name. This is used across all tests, including the Cold Pressor Test.
 
-The test_editor.py script allows users to view, add, edit, or delete tests. Here's how to use it:
+### Example Log
 
-1. Initialization: On the first run, the script checks for the existence of the test.json file in the test/ directory. If it doesn't exist or is invalid, the script will initialize a new JSON file with default values.
+The logging function creates entries in the following format:
 
-2. View Tests: Enter 1 when prompted to view the list of tests.
-
-3. Add a Test: Enter 2 and provide the name of the test you want to add.
-
-4. Edit a Test: Enter 3, provide the test number you want to edit, and then provide the new test name.
-
-5. Delete a Test: Enter 4 and provide the test number you want to delete.
-
-6. Exit: Enter 5 to exit the script.
-
-Remember to always backup your test.json file before making any changes.
+```csv
+Event,Start Time,End Time,Duration (milliseconds)
+Program Start,2024-03-20 15:31:30.457,,
+First Relaxation Start,2024-03-20 15:31:30.465,,
+First Relaxation End,2024-03-20 15:31:30.465,2024-03-20 15:31:39.459,8993
+StroopTest Start,2024-03-20 15:31:39.459,,
+StroopTest End,2024-03-20 15:31:39.459,2024-03-20 15:31:41.826,2367
+MathTest Start,2024-03-20 15:31:41.828,,
+MathTest End,2024-03-20 15:31:41.828,2024-03-20 15:31:44.723,2895
+Video Feedback Start,2024-03-20 15:31:44.791,,
+Video 1 Start,2024-03-20 15:31:47.313,,
+Video 1 End,2024-03-20 15:31:47.313,2024-03-20 15:32:01.432,14118
+Video 2 Start,2024-03-20 15:32:03.992,,
+Video 2 End,2024-03-20 15:32:03.992,2024-03-20 15:32:19.924,15932
+Video Feedback End,2024-03-20 15:31:44.791,2024-03-20 15:32:23.112,38321
+Cold Pressure Test Start,2024-03-20 15:32:25.071,,
+CPT Initial Relaxation Start,2024-03-20 15:32:25.569,,
+CPT Initial Relaxation End,2024-03-20 15:32:25.569,2024-03-20 15:32:35.571,10002
+CPT Test Start,2024-03-20 15:32:35.573,,
+CPT Test End,2024-03-20 15:32:35.573,2024-03-20 15:32:45.576,10002
+CPT Post Test Relaxation Start,2024-03-20 15:32:50.578,,
+CPT Post Test Relaxation End,2024-03-20 15:32:50.578,2024-03-20 15:33:00.581,10003
+Cold Pressure Test End,2024-03-20 15:32:25.071,2024-03-20 15:33:05.588,40517
+Program End,2024-03-20 15:31:30.457,2024-03-20 15:33:07.723,97265
+```
 
 ## Adding Python to PATH on Windows
 
