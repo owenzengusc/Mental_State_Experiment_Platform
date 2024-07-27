@@ -44,7 +44,12 @@ test_editor: A utility to modify, add, or delete tests.
    cd Stress_Test_Interface
    ```
 
-3. Run the main script:
+3. Install required packages:
+   ```
+   pip3 install -r requirements.txt
+   ```
+
+4. Run the main script:
    ```
    python3 main.py
    ```
@@ -65,7 +70,12 @@ test_editor: A utility to modify, add, or delete tests.
    cd Stress_Test_Interface
    ```
 
-3. Run the main script:
+3. Install required packages:
+   ```
+   pip3 install -r requirements.txt
+   ```
+
+4. Run the main script:
    ```
    py main.py
    ```
@@ -82,7 +92,12 @@ test_editor: A utility to modify, add, or delete tests.
    cd Stress_Test_Interface
    ```
 
-3. Run the main script:
+3. Install required packages:
+   ```
+   pip3 install -r requirements.txt
+   ```
+
+4. Run the main script:
    ```
    py main.py
    ```
@@ -99,7 +114,12 @@ test_editor: A utility to modify, add, or delete tests.
    cd Stress_Test_Interface
    ```
 
-3. Run the main script:
+3. Install required packages:
+   ```
+   pip3 install -r requirements.txt
+   ```
+
+4. Run the main script:
    ```
    python main.py
    ```
@@ -116,7 +136,12 @@ test_editor: A utility to modify, add, or delete tests.
    cd Stress_Test_Interface
    ```
 
-3. Run the main script:
+3. Install required packages:
+   ```
+   pip3 install -r requirements.txt
+   ```
+
+4. Run the main script:
    ```
    python3 main.py
    ```
