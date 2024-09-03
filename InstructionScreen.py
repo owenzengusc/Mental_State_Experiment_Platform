@@ -33,6 +33,7 @@ class InstructionScreen:
                 "Words will be displayed in various colors.\n"
                 "Your task is to select the COLOR of the word, not the word itself.\n"
                 "Click on the correct color on the keyboard as quickly as possible.\n"
+                "Key 'Q' is Green, 'W' is Red, 'E' is Yellow, 'R' is blue \n"
                 "The test will last for a fixed duration."
             )
             example_text = "For example, for the word "
