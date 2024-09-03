@@ -66,7 +66,7 @@ class InstructionScreen:
             self.example_word_label = tk.Label(self.example_frame, text="RED", font=self.font_medium, bg=self.bg_color, fg="blue")
             self.example_word_label.pack(side=tk.LEFT)
             
-            self.example_continue_label = tk.Label(self.example_frame, text=" you should select 'Blue'.", font=self.font_medium, bg=self.bg_color, fg=self.fg_color, justify=tk.LEFT)
+            self.example_continue_label = tk.Label(self.example_frame, text=" you should press 'R' on the keyboard.", font=self.font_medium, bg=self.bg_color, fg=self.fg_color, justify=tk.LEFT)
             self.example_continue_label.pack(side=tk.LEFT)
         
         # Start button
