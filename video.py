@@ -101,7 +101,7 @@ class VideoFeedbackApp:
         # show the clip in fullscreen
         clip.preview(fullscreen=True)
         #clip.preview()
-        pygame.quit()  # Quit Pygame after the video ends
+        # pygame.quit()  # Quit Pygame after the video ends
         # Log the end of the video
         self.EndTime = datetime.now()
         duration = int((self.EndTime - self.StartTime).total_seconds() * 1000)

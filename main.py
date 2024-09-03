@@ -110,6 +110,7 @@ def execute_sequence(choice, ppl):
         log_event('Video Feedback Start', video_start_time, None, None, username=ppl.name)
         app = VideoFeedbackApp(video_window, ppl.name)
         video_window.mainloop()
+        print('Video Feedback Ended')
         video_end_time = datetime.now()
         duration = int((video_end_time - video_start_time).total_seconds() * 1000)  # Duration in milliseconds
         log_event('Video Feedback End', video_start_time, video_end_time, duration, username=ppl.name)
