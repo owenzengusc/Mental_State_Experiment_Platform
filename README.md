@@ -41,7 +41,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 2. Navigate to the project directory:
    ```
-   cd Stress_Test_Interface
+   cd Mental_State_Experiment_Platform
    ```
 
 3. Install required packages:
@@ -67,7 +67,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 2. Navigate to the project directory:
    ```
-   cd Stress_Test_Interface
+   cd Mental_State_Experiment_Platform
    ```
 
 3. Install required packages:
@@ -89,7 +89,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 2. Navigate to the project directory:
    ```
-   cd Stress_Test_Interface
+   cd Mental_State_Experiment_Platform
    ```
 
 3. Install required packages:
@@ -111,7 +111,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 2. Navigate to the project directory:
    ```
-   cd Stress_Test_Interface
+   cd Mental_State_Experiment_Platform
    ```
 
 3. Install required packages:
@@ -133,7 +133,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 2. Navigate to the project directory:
    ```
-   cd Stress_Test_Interface
+   cd Mental_State_Experiment_Platform
    ```
 
 3. Install required packages:
