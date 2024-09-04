@@ -36,7 +36,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone git@github.com:owenzengusc/Stress_Test_Interface.git
+   git clone git@github.com:owenzengusc/Mental_State_Experiment_Platform.git
    ```
 
 2. Navigate to the project directory:
@@ -62,7 +62,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone git@github.com:owenzengusc/Stress_Test_Interface.git
+   git clone git@github.com:owenzengusc/Mental_State_Experiment_Platform.git
    ```
 
 2. Navigate to the project directory:
@@ -84,7 +84,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone git@github.com:owenzengusc/Stress_Test_Interface.git
+   git clone git@github.com:owenzengusc/Mental_State_Experiment_Platform.git
    ```
 
 2. Navigate to the project directory:
@@ -128,7 +128,7 @@ test_editor: A utility to modify, add, or delete tests.
 
 1. Clone the repository:
    ```
-   git clone git@github.com:owenzengusc/Stress_Test_Interface.git
+   git clone git@github.com:owenzengusc/Mental_State_Experiment_Platform.git
    ```
 
 2. Navigate to the project directory:
