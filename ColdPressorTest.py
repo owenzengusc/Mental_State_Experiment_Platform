@@ -4,10 +4,10 @@ import csv
 import time
 from datetime import datetime
 
-class ColdPressureTest:
+class ColdPressorTest:
     def __init__(self, master, username):
         self.master = master
-        self.master.title("Cold Pressure Test")
+        self.master.title("Cold Pressor Test")
         pygame.mixer.init()
         self.username = username
         self.first_relaxation_duration = 180  # 3 minutes 180
@@ -142,7 +142,7 @@ def show_cold_pressure_test(username):
     # Set the window position to the center of the screen
     root.geometry(f"{window_width}x{window_height}+{center_x}+{center_y}")
 
-    app = ColdPressureTest(root, username)
+    app = ColdPressorTest(root, username)
     app.start_initial_relaxation()  # Start the sequence
     root.mainloop()
 

@@ -45,7 +45,7 @@ class InstructionScreen:
                 "Please be as honest and accurate as possible in your ratings."
             )
             example_text = ""
-        elif test_type == "ColdPressureTest":
+        elif test_type == "ColdPressorTest":
             description_text = (
                 "You will be asked to put your hand in iced water for a fixed duration.\n"
                 "Please follow the instructions provided during the test.\n"

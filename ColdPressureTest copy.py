@@ -1,11 +1,11 @@
-# ColdPressureTest.py
+# ColdPressorTest.py
 import tkinter as tk
 import pygame
 
-class ColdPressureTest:
+class ColdPressorTest:
     def __init__(self, master):
         self.master = master
-        self.master.title("Cold Pressure Test")
+        self.master.title("Cold Pressor Test")
 
         # Initialize pygame for audio playback
         pygame.mixer.init()
@@ -95,7 +95,7 @@ def show_cold_pressure_test():
     # Set the window position to the center of the screen
     root.geometry(f"{window_width}x{window_height}+{center_x}+{center_y}")
 
-    app = ColdPressureTest(root)
+    app = ColdPressorTest(root)
     app.start_initial_relaxation()  # Start the sequence
     root.mainloop()
 

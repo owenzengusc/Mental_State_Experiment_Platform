@@ -5,7 +5,7 @@ from window import *
 from user import *
 from StroopTest import *
 from MathTest import *
-from ColdPressureTest import *
+from ColdPressorTest import *
 from FeedbackScreen import FeedbackScreen
 from InstructionScreen import InstructionScreen
 from video import VideoFeedbackApp
@@ -53,8 +53,8 @@ def show_instruction_screen(test_name):
         app = InstructionScreen(instruction_window, "StroopTest", instruction_window.destroy)
     elif test_name == "MathTest":
         app = InstructionScreen(instruction_window, "MathTest", instruction_window.destroy)
-    elif test_name == "ColdPressureTest":
-        app = InstructionScreen(instruction_window, "ColdPressureTest", instruction_window.destroy)
+    elif test_name == "ColdPressorTest":
+        app = InstructionScreen(instruction_window, "ColdPressorTest", instruction_window.destroy)
     instruction_window.mainloop()
 
 def execute_sequence(choice, ppl):
@@ -118,14 +118,14 @@ def execute_sequence(choice, ppl):
     
     if choice in ["Tests+Videos+CPT", "CPT"]:
         
-        show_instruction_screen("ColdPressureTest")
-        # record the start of the cold pressure test
+        show_instruction_screen("ColdPressorTest")
+        # record the start of the Cold Pressor test
         cpt_start_time = datetime.now()
-        log_event('Cold Pressure Test Start', cpt_start_time, None, None, username=ppl.name)
+        log_event('Cold Pressor Test Start', cpt_start_time, None, None, username=ppl.name)
         show_cold_pressure_test(username=ppl.name)
         cpt_end_time = datetime.now()
         duration = int((cpt_end_time - cpt_start_time).total_seconds() * 1000)  # Duration in milliseconds
-        log_event('Cold Pressure Test End', cpt_start_time, cpt_end_time, duration, username=ppl.name)
+        log_event('Cold Pressor Test End', cpt_start_time, cpt_end_time, duration, username=ppl.name)
     else:
         # record the start of the relaxation screen
         relaxation_start_time = datetime.now()
