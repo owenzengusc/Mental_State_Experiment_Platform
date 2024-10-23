@@ -1,0 +1,11 @@
+Event,Start Time,End Time,Duration (milliseconds)
+Program Start,2024-10-22 16:18:49.712,,
+First Relaxation Start,2024-10-22 16:18:49.714,,
+First Relaxation End,2024-10-22 16:18:49.714,2024-10-22 16:18:53.195,3481
+StroopTest Start,2024-10-22 16:18:53.196,,
+StroopTest End,2024-10-22 16:18:53.196,2024-10-22 16:18:55.273,2076
+MathTest Start,2024-10-22 16:18:55.273,,
+MathTest End,2024-10-22 16:18:55.273,2024-10-22 16:19:18.649,23375
+Final Relaxation Start,2024-10-22 16:19:18.650,,
+Final Relaxation End,2024-10-22 16:19:18.650,2024-10-22 16:19:22.223,0
+Program End,2024-10-22 16:18:49.712,2024-10-22 16:19:22.919,33206
