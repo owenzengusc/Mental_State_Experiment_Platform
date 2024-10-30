@@ -19,7 +19,7 @@ class ImageTest:
         # Create a window
         self.root = root
         self.root.title("Image Test")
-        self.root.configure(bg="black")
+        self.root.configure(bg="#E6F3FF")
         # Initialize the game variables
         self.username = username
         self.start_time = time.time()
@@ -39,14 +39,14 @@ class ImageTest:
         self.remaining_time = TOTAL_GAME_TIME
         self.answered = True  # Set to True initially to avoid the automatic miss at the start
         # Create the widgets
-        self.top_frame = tk.Frame(self.root, bg="black")
+        self.top_frame = tk.Frame(self.root, bg="#E6F3FF")
         self.top_frame.pack(fill=tk.BOTH, padx=10, pady=10)
         # Create the time label on the top left
-        self.time_label = tk.Label(self.top_frame, text=f"Time: {self.remaining_time}", anchor='w', bg="black", fg="white")
+        self.time_label = tk.Label(self.top_frame, text=f"Time: {self.remaining_time}", anchor='w', bg="#E6F3FF", fg="black")
         self.time_label.pack(side=tk.LEFT)
         # Create the question label in the middle
-        self.label = tk.Label(self.root, bg="black")
-        self.label.pack(pady=100, expand=True)
+        self.label = tk.Label(self.root, bg="#E6F3FF", wraplength=800)  # Increased wraplength for instructions
+        self.label.pack(pady=50, expand=True)
         # Create the buttons frame at the bottom
         self.buttons_frame = tk.Frame(self.root, bg="black")
         self.buttons_frame.pack(pady=20)
@@ -64,14 +64,17 @@ class ImageTest:
 
     def load_image(self, image_path):
         image = Image.open(image_path)
+        # Resize the image to make it bigger (adjust the size as needed)
+        image = image.resize((800, 600), Image.LANCZOS)  # Increased size
         photo = ImageTk.PhotoImage(image)
         self.label.config(image=photo)
-        self.label.image = photo  # Keep a reference to avoid garbage collection
+        self.label.image = photo  # Keep a reference to avoid garbage 
 
     # Start the game after the countdown
     def countdown(self, count):
         if count > 0:
-            self.label.config(text=str(count), fg="white")
+            instructions = "Image Test:\n\nA series of images will be displayed.\n\nRecord your reaction to the images by pressing:\n1 (disgusted), 2 (neutral), 3 (pleased) on your keyboard.\n\nStarting in: "
+            self.label.config(text=f"{instructions}{count}", fg="black", font=("Arial", 16))
             self.root.after(1000, self.countdown, count-1)
         else:
             self.label.config(text="", fg="black")  # Clear the countdown number
@@ -191,7 +194,7 @@ if __name__ == "__main__":
         
     # Fix the window size
     root.minsize(window_width, window_height)  # Set to your desired width and height
-    root.maxsize(1960, 1080)  # Set to your desired width and height
+    root.maxsize(2560, 1600)  # Set to your desired width and height
 
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
