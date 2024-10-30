@@ -30,10 +30,12 @@ class ImageTest:
         style.configure('TButton',font=('Arial', 31), relief='flat', padding=6)
         self.start_time_header = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
         self.path_to_file = PATH+'imageTest_'+username+'.csv'
-        self.correct_count = 0
-        self.wrong_count = 0
+        self.disgusted_count = 0
+        self.neutral_count = 0
+        self.pleased_count = 0
         self.miss_count = 0
         self.total_questions = 0
+        self.image_count = 0  # Add this line to keep track of shown images
         self.remaining_time = TOTAL_GAME_TIME
         self.answered = True  # Set to True initially to avoid the automatic miss at the start
         # Create the widgets
@@ -84,6 +86,8 @@ class ImageTest:
 
         # Load and display the first image
         self.load_image(self.image_list[self.current_image_index])
+        self.image_count += 1  # Increment the image count
+
 
         # Bind keys to their respective answers
         self.root.bind('1', lambda event: self.check_answer("Disturbed"))
@@ -94,9 +98,12 @@ class ImageTest:
         # Your existing answer checking logic here
         self.write_data_to_csv(user_choice)
         
-        # Move to the next image
-        self.current_image_index = (self.current_image_index + 1) % len(self.image_list)
-        self.load_image(self.image_list[self.current_image_index])
+        if(self.image_count < len(self.image_list)):
+            self.current_image_index = (self.current_image_index + 1) % len(self.image_list)
+            self.load_image(self.image_list[self.current_image_index])
+            self.image_count += 1
+        else:
+            self.end_game()  # End the game if all images have been sho
 
     def start_question_timer_thread(self):
         self.question_timer_thread = threading.Thread(target=self.question_timer_logic)
@@ -106,6 +113,7 @@ class ImageTest:
     def question_timer_logic(self):
         # Implement your question timer logic here
         pass
+
 
     # Thread to play music when the game starts
     def play_music(self):
@@ -141,6 +149,7 @@ class ImageTest:
         self.root.after(2000, self.root.destroy) 
         if self.callback:
             self.callback()
+
         
     # Write the header to the CSV file      
     def write_header_to_csv(self):
