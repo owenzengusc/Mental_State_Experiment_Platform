@@ -52,6 +52,16 @@ class InstructionScreen:
                 "The test will last for a fixed duration."
             )
             example_text = ""
+
+        # TODO 4: Add instructions for ImageTest
+        elif test_type == "ImageTest":
+            description_text = (
+                "You will be presented with a series of images.\n"
+                "After each image, you will be asked to rate your happiness level.\n"
+                "Use the scale provided to indicate how the image made you feel.\n"
+                "Please be as honest and accurate as possible in your ratings."
+            )
+            example_text = ""
         
         self.description_label = tk.Label(root, text=description_text, font=self.font_medium, bg=self.bg_color, fg=self.fg_color, justify=tk.LEFT)
         self.description_label.pack(pady=20)

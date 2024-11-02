@@ -5,6 +5,7 @@ from window import *
 from user import *
 from StroopTest import *
 from MathTest import *
+from ImageTest import *  # TODO 1: Import the ImageTest class
 from ColdPressorTest import *
 from FeedbackScreen import FeedbackScreen
 from InstructionScreen import InstructionScreen
@@ -55,6 +56,9 @@ def show_instruction_screen(test_name):
         app = InstructionScreen(instruction_window, "MathTest", instruction_window.destroy)
     elif test_name == "ColdPressorTest":
         app = InstructionScreen(instruction_window, "ColdPressorTest", instruction_window.destroy)
+    # TODO 3: Add the ImageTest Test
+    elif test_name == "ImageTest":
+        app = InstructionScreen(instruction_window, "ImageTest", instruction_window.destroy)
     instruction_window.mainloop()
 
 def execute_sequence(choice, ppl):
@@ -89,6 +93,14 @@ def execute_sequence(choice, ppl):
                 math_test_window.geometry(f"{TEST_WINDOW_WIDTH}x{TEST_WINDOW_HEIGHT}+{(math_test_window.winfo_screenwidth() - TEST_WINDOW_WIDTH) // 2}+{(math_test_window.winfo_screenheight() - TEST_WINDOW_HEIGHT) // 2}")
                 app = MathTest(math_test_window, ppl.name)
                 math_test_window.mainloop()
+
+            # TODO 2: Add the ImageTest Test
+            elif test == "ImageTest":
+                math_test_window = tk.Tk()
+                math_test_window.geometry(f"{TEST_WINDOW_WIDTH}x{TEST_WINDOW_HEIGHT}+{(math_test_window.winfo_screenwidth() - TEST_WINDOW_WIDTH) // 2}+{(math_test_window.winfo_screenheight() - TEST_WINDOW_HEIGHT) // 2}")
+                app = MathTest(math_test_window, ppl.name)
+                math_test_window.mainloop()
+            
             test_end_time = datetime.now()
             duration = int((test_end_time - test_start_time).total_seconds() * 1000)  # Duration in milliseconds
             log_event(f"{test} End", test_start_time, test_end_time, duration, username=ppl.name)
