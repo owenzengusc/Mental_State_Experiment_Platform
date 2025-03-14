@@ -4,6 +4,7 @@ import csv
 import time
 import threading
 from PIL import Image, ImageTk
+import os
 
 # Total game time in seconds (3 minutes = 180 seconds)
 TOTAL_GAME_TIME = 10*10
@@ -56,11 +57,22 @@ class ImageTest:
         self.question_timer_thread = None  # Add this line to create a placeholder for the thread
         
         # Initialize image list (you need to populate this with your image paths)
-        self.image_list = ["images/flower1.jpeg", "images/flower2.jpeg", "images/flower3.jpeg", 
-                           "images/flower4.jpeg", "images/flower5.jpeg", "images/flower6.jpeg",
-                           "images/flower7.jpeg", "images/flower8.jpeg", "images/flower9.jpeg",
-                           "images/flower10.jpeg"]
+        
+        image_folders = [
+            "images/osfstorage-archive/Checking",
+            "images/osfstorage-archive/Symmetry",
+            "images/osfstorage-archive/Washing",
+        ]
+
+        self.image_list = []  # To store paths of all images
         self.current_image_index = 0
+
+        # Collect all image paths
+        for folder in image_folders:
+            for filename in os.listdir(folder):
+                if filename.endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
+                    file_path = os.path.join(folder, filename)
+                    self.image_list.append(file_path)
 
     def load_image(self, image_path):
         image = Image.open(image_path)
@@ -89,8 +101,7 @@ class ImageTest:
 
         # Load and display the first image
         self.load_image(self.image_list[self.current_image_index])
-        self.image_count += 1  # Increment the image count
-
+        self.current_image_index += 1  # Increment the image count
 
         # Bind keys to their respective answers
         self.root.bind('1', lambda event: self.check_answer("Disturbed"))

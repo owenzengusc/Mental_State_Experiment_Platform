@@ -96,10 +96,10 @@ def execute_sequence(choice, ppl):
 
             # TODO 2: Add the ImageTest Test
             elif test == "ImageTest":
-                math_test_window = tk.Tk()
-                math_test_window.geometry(f"{TEST_WINDOW_WIDTH}x{TEST_WINDOW_HEIGHT}+{(math_test_window.winfo_screenwidth() - TEST_WINDOW_WIDTH) // 2}+{(math_test_window.winfo_screenheight() - TEST_WINDOW_HEIGHT) // 2}")
-                app = MathTest(math_test_window, ppl.name)
-                math_test_window.mainloop()
+                image_test_window = tk.Tk()
+                image_test_window.geometry(f"{TEST_WINDOW_WIDTH}x{TEST_WINDOW_HEIGHT}+{(image_test_window.winfo_screenwidth() - TEST_WINDOW_WIDTH) // 2}+{(image_test_window.winfo_screenheight() - TEST_WINDOW_HEIGHT) // 2}")
+                app = ImageTest(image_test_window, ppl.name)
+                image_test_window.mainloop()
             
             test_end_time = datetime.now()
             duration = int((test_end_time - test_start_time).total_seconds() * 1000)  # Duration in milliseconds

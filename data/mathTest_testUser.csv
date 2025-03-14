@@ -1,0 +1,155 @@
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+11/17/2024 18:07:11,5818,15 - 5,10,75,WRONG
+11/17/2024 18:07:11,6263,90 - 25,65,42,WRONG
+11/17/2024 18:07:12,6490,6 + 42,48,18,WRONG
+11/17/2024 18:07:12,6995,30 + 37,67,67,CORRECT
+11/17/2024 18:07:12,7197,69 + 30,99,100,WRONG
+11/17/2024 18:07:13,7588,41 + 1 + 52,94,94,CORRECT
+11/17/2024 18:07:13,7876,9 + 41 - 4 + 2,48,22,WRONG
+11/17/2024 18:07:14,8352,85 - 6 - 29,50,52,WRONG
+11/17/2024 18:07:14,8613,43 - 4,39,37,WRONG
+11/17/2024 18:07:14,8985,70 - 36,34,88,WRONG
+11/17/2024 18:07:14,9281,87 + 1 - 25,63,58,WRONG
+11/17/2024 18:07:15,9664,75 - 73,2,19,WRONG
+11/17/2024 18:07:22,16668,4 * 18,72,MISS,MISS
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+11/17/2024 18:09:57,5455,38 - 29,9,67,WRONG
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+11/17/2024 18:12:00,12015,50 + 36,86,MISS,MISS
+11/17/2024 18:12:04,15565,75 - 49,26,51,WRONG
+11/17/2024 18:12:06,17512,96 - 88,8,99,WRONG
+11/17/2024 18:12:06,18101,87 + 10,97,97,CORRECT
+11/17/2024 18:12:07,18687,77 - 33,44,44,CORRECT
+11/17/2024 18:12:07,19367,75 - 63,12,65,WRONG
+11/17/2024 18:12:08,19819,8 + 87,95,95,CORRECT
+11/17/2024 18:12:08,20302,56 + 2 * 9 / 1,74,14,WRONG
+11/17/2024 18:12:09,20718,22 + 7,29,74,WRONG
+11/17/2024 18:12:09,21097,29 - 6,23,30,WRONG
+11/17/2024 18:12:10,21519,59 + 2 - 26,35,78,WRONG
+11/17/2024 18:12:10,21859,22 + 22,44,80,WRONG
+11/17/2024 18:12:11,22442,3 + 96 - 6 + 2,95,95,CORRECT
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+11/17/2024 18:13:02,6104,99 - 1,98,30,WRONG
+11/17/2024 18:13:03,6725,20 + 9,29,29,CORRECT
+11/17/2024 18:13:03,7238,40 + 38,78,80,WRONG
+11/17/2024 18:13:04,7695,23 + 21,44,88,WRONG
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+11/17/2024 18:13:28,6045,11 / 11,1,15,WRONG
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+11/17/2024 18:18:48,6260,19 - 7,12,12,CORRECT
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+11/17/2024 19:40:37,7359,37 * 2,74,64,WRONG
+11/17/2024 19:40:38,7992,57 + 6,63,63,CORRECT
+11/17/2024 19:40:38,8501,24 + 65,89,92,WRONG
+11/17/2024 19:40:39,8943,3 + 13,16,16,CORRECT
+11/17/2024 19:40:39,9307,2 + 9 + 1 * 18,29,63,WRONG
+11/17/2024 19:40:39,9665,8 - 14 + 89,83,35,WRONG
+11/17/2024 19:40:40,10754,71 - 52,19,19,CORRECT
+11/17/2024 19:40:41,11167,64 - 20,44,44,CORRECT
+11/17/2024 19:40:41,11531,38 - ( 5 - 22 ),55,28,WRONG
+11/17/2024 19:40:42,11903,28 - ( 4 + 18 ),6,71,WRONG
+11/17/2024 19:40:42,12189,4 * 17 / 2 - 9,25,78,WRONG
+11/17/2024 19:40:42,12413,21 - 6 + 76,91,91,CORRECT
+11/17/2024 19:40:43,13076,57 + 5,62,96,WRONG
+11/17/2024 19:40:50,20086,2 * 15 * 2 - 2,58,MISS,MISS
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+01/02/2025 18:32:35,12009,58 + 38,96,MISS,MISS
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+01/02/2025 18:32:56,12510,88 - 9,79,MISS,MISS
+01/02/2025 18:32:59,15759,68 - 60,8,96,WRONG
+01/02/2025 18:33:00,16239,49 + 38,87,90,WRONG
+01/02/2025 18:33:00,16616,1 + 91,92,92,CORRECT
+01/02/2025 18:33:00,16790,43 + 15,58,65,WRONG
+01/02/2025 18:33:01,16966,24 + 21,45,98,WRONG
+01/02/2025 18:33:01,17150,21 + 37,58,47,WRONG
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+01/05/2025 20:24:55,12022,51 + 25,76,MISS,MISS
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+01/05/2025 21:03:56,12027,18 + 38,56,MISS,MISS
+01/05/2025 21:04:03,19032,87 - 81,6,MISS,MISS
+01/05/2025 21:04:10,26038,82 - 20,62,MISS,MISS
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+01/08/2025 07:18:19,7312,80 + 13,93,66,WRONG
+01/08/2025 07:18:19,7748,88 - 2,86,68,WRONG
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+01/21/2025 18:15:59,12024,99 - 58,41,MISS,MISS
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+01/22/2025 14:37:30,5864,77 + 5,82,82,CORRECT
+01/22/2025 14:37:31,6197,84 - 40 + 9,53,80,WRONG
+01/22/2025 14:37:31,6499,20 + 30,50,92,WRONG
+01/22/2025 14:37:31,6763,86 - 46,40,40,CORRECT
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+01/22/2025 16:53:55,12025,85 - 35,50,MISS,MISS
+01/22/2025 16:54:02,19032,15 + 52,67,MISS,MISS
+01/22/2025 16:54:06,22997,77 - 26,51,51,CORRECT
+01/22/2025 16:54:07,23525,60 - 43,17,84,WRONG
+01/22/2025 16:54:07,23676,53 + 34,87,82,WRONG
+01/22/2025 16:54:07,23828,69 - 34,35,85,WRONG
+01/22/2025 16:54:07,23988,14 + 65 * 1,79,32,WRONG
+01/22/2025 16:54:08,24140,56 + 9 - 45,20,83,WRONG
+01/22/2025 16:54:08,24324,90 - 22,68,68,CORRECT
+01/22/2025 16:54:08,24806,69 - 22,47,15,WRONG
+01/22/2025 16:54:08,24939,43 + 2 + 7 - 1,51,51,CORRECT
+01/22/2025 16:54:09,25749,2 + 23 * 4 - 7,87,82,WRONG
+01/22/2025 16:54:11,27782,68 - ( 40 - 8 ),36,38,WRONG
+01/22/2025 16:54:12,28173,24 - 8,16,97,WRONG
+01/22/2025 16:54:14,30359,53 - 6 * 4 / 8,50,38,WRONG
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+02/13/2025 13:37:39,12012,6 + 58,64,MISS,MISS
+02/13/2025 13:37:46,19021,71 + 12,83,MISS,MISS
+02/13/2025 13:37:53,26034,38 + 32,70,MISS,MISS
+02/13/2025 13:38:00,33046,31 - 18,13,MISS,MISS
+02/13/2025 13:38:07,40050,44 + 8,52,MISS,MISS
+02/13/2025 13:38:14,47061,86 + 1,87,MISS,MISS
+02/13/2025 13:38:21,54065,21 + 69,90,MISS,MISS
+02/13/2025 13:38:28,61073,88 - 57,31,MISS,MISS
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,testUser
+02/24/2025 18:22:00,12015,30 - 3,27,MISS,MISS
+02/24/2025 18:22:07,19022,19 + 40,59,MISS,MISS
+02/24/2025 18:22:14,26029,94 / 47,2,MISS,MISS
+02/24/2025 18:22:18,29491,80 - 2,78,78,CORRECT
+02/24/2025 18:22:20,31474,35 - 3,32,32,CORRECT
+02/24/2025 18:22:22,34139,36 - 11,25,99,WRONG
+02/24/2025 18:22:22,34306,48 - ( 43 - 9 ),14,15,WRONG
+02/24/2025 18:22:23,34456,8 + 62,70,59,WRONG
+02/24/2025 18:22:30,41474,71 * 1 + 7 - 7,71,MISS,MISS
+02/24/2025 18:22:31,42956,50 - 6,44,44,CORRECT
+02/24/2025 18:22:38,49981,22 + 3 * 14,64,MISS,MISS
+02/24/2025 18:22:45,57026,2 / 2 + 54 + 3,58,MISS,MISS
+02/24/2025 18:22:49,61007,7 * 2 + 1 + 55,70,70,CORRECT
+02/24/2025 18:22:51,62974,87 + 1,88,88,CORRECT
+02/24/2025 18:22:52,63956,72 - 39,33,97,WRONG
+02/24/2025 18:22:53,64507,68 - 9,59,89,WRONG
+02/24/2025 18:22:53,64740,14 + 47,61,42,WRONG
+02/24/2025 18:22:55,67024,96 - 24 * 1,72,28,WRONG
+02/24/2025 18:22:56,68307,1 + 88 - 82,7,59,WRONG
+02/24/2025 18:23:01,72689,64 / 4 / 16,1,1,CORRECT
+02/24/2025 18:23:07,79290,58 - 34,24,24,CORRECT
+02/24/2025 18:23:11,83107,45 + 33,78,78,CORRECT
+02/24/2025 18:23:17,88424,18 + 65 - 6,77,77,CORRECT
+02/24/2025 18:23:24,95454,60 * 2 - 5 * 5,95,MISS,MISS
+02/24/2025 18:23:25,97073,42 / 21,2,2,CORRECT
+02/24/2025 18:23:32,104081,58 - 26,32,MISS,MISS
+02/24/2025 18:23:39,111103,49 + 4 / 4 + 2,52,MISS,MISS
+02/24/2025 18:23:46,118106,7 * 12 / ( 6 / 4 ),56,MISS,MISS

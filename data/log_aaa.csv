@@ -1,0 +1,13 @@
+Event,Start Time,End Time,Duration (milliseconds)
+Program Start,2025-01-22 15:23:24.450,,
+First Relaxation Start,2025-01-22 15:23:24.452,,
+First Relaxation End,2025-01-22 15:23:24.452,2025-01-22 15:23:27.041,2588
+StroopTest Start,2025-01-22 15:23:27.042,,
+StroopTest End,2025-01-22 15:23:27.042,2025-01-22 15:23:39.363,12320
+MathTest Start,2025-01-22 15:23:39.363,,
+MathTest End,2025-01-22 15:23:39.363,2025-01-22 15:23:40.486,1122
+ImageTest Start,2025-01-22 15:23:40.486,,
+ImageTest End,2025-01-22 15:23:40.486,2025-01-22 15:23:43.722,3235
+Final Relaxation Start,2025-01-22 15:23:43.722,,
+Final Relaxation End,2025-01-22 15:23:43.722,2025-01-22 15:23:46.461,0
+Program End,2025-01-22 15:23:24.450,2025-01-22 15:23:47.108,22657

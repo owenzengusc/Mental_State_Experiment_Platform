@@ -1,0 +1,4 @@
+Timestamp,Relative Time (ms),Expression,Answer,Selected Option,Correctness,nick
+01/14/2025 23:00:15,8099,93 - 65,28,28,CORRECT
+01/14/2025 23:00:17,10203,87 - 84,3,3,CORRECT
+01/14/2025 23:00:19,11915,9 + 82,91,91,CORRECT
