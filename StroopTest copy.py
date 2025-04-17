@@ -11,8 +11,6 @@ colors = {
     "Blue": "blue",
     "Green": "green",
     "Yellow": "yellow",
-    "Purple": "purple",
-    "Orange": "orange"
 }
 
 # Total game time in seconds (3 minutes = 180 seconds)
@@ -25,7 +23,7 @@ QUESTION_FREQUENCY = 0.25  # 1 question every second
 INCREASE_RATE = 0.015
 
 # Maximum question frequency the game can reach
-MAX_QUESTION_FREQUENCY = 1  # 2 questions every second
+MAX_QUESTION_FREQUENCY = 0.75  # 2 questions every second
 
 # Time to wait before the game starts
 COUNTDOWN_TIME = 5
@@ -39,7 +37,7 @@ class StroopTest:
         # Create a window
         self.root = root
         self.root.title("Stroop Test")
-        self.root.configure(bg="black")
+        self.root.configure(bg="light gray")
         # Initialize the game variables
         self.username = username
         self.start_time = time.time()
@@ -47,7 +45,7 @@ class StroopTest:
         style = ttk.Style()
 
         # This will set all ttk.Button widgets to the 'flat' relief style
-        style.configure('TButton',font=('Arial', 31), relief='flat', padding=6)
+        style.configure('TButton',font=('Open Sans', 31), relief='flat', padding=6)
         self.start_time_header = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
         self.path_to_file = PATH+'stroopTest_'+username+'.csv'
         self.correct_count = 0
@@ -60,10 +58,10 @@ class StroopTest:
         self.answered = True  # Set to True initially to avoid the automatic miss at the start
         self.current_frequency = QUESTION_FREQUENCY
         # Create the widgets
-        self.top_frame = tk.Frame(self.root, bg="black")
+        self.top_frame = tk.Frame(self.root, bg="light gray")
         self.top_frame.pack(fill=tk.BOTH, padx=10, pady=10)
         # Create the time label on the top left
-        self.time_label = tk.Label(self.top_frame, text=f"Time: {self.remaining_time}", anchor='w', bg="black", fg="white")
+        self.time_label = tk.Label(self.top_frame, text=f"Time: {self.remaining_time}", anchor='w', bg="light gray", fg="black", font=("Open Sans", 24))
         self.time_label.pack(side=tk.LEFT)
         # # Create the speed label on the top center
         # self.speed_label = tk.Label(self.top_frame, text=f"Speed: {self.current_frequency:.2f} Q/s", anchor='center', bg="black", fg="white")
@@ -72,10 +70,10 @@ class StroopTest:
         # self.score_label = tk.Label(self.top_frame, text="Correct: 0   Wrong: 0   Miss: 0", anchor='e', bg="black", fg="white")
         # self.score_label.pack(side=tk.RIGHT)
         # Create the question label in the middle
-        self.label = tk.Label(self.root, font=("Arial", 100), bg="black")
+        self.label = tk.Label(self.root, font=("Open Sans", 200), bg="light gray")
         self.label.pack(pady=100, expand=True)
         # Create the buttons frame at the bottom
-        self.buttons_frame = tk.Frame(self.root, bg="black")
+        self.buttons_frame = tk.Frame(self.root, bg="light gray")
         self.buttons_frame.pack(pady=20)
         # Create the buttons
         # Start the countdown before the game begins
@@ -87,7 +85,7 @@ class StroopTest:
     # Start the game after the countdown
     def countdown(self, count):
         if count > 0:
-            self.label.config(text=str(count), fg="white")
+            self.label.config(text=str(count), fg="black")
             self.root.after(1000, self.countdown, count-1)
         else:
             self.label.config(text="", fg="black")  # Clear the countdown number
@@ -98,10 +96,13 @@ class StroopTest:
         self.write_header_to_csv()
         self.update_timer()
         self.start_question_timer_thread()  # Use the new method to start the thread
-        for color_name in colors:
-            btn = ttk.Button(self.buttons_frame, text=color_name)
-            btn.pack(side=tk.LEFT, padx=10)
-            btn.bind('<Button>', lambda event, cn=color_name: self.check_answer(cn))  # Bind the button press event
+        self.play_music_thread()
+
+        # Bind keys to their respective color answers
+        self.root.bind('g', lambda event: self.check_answer("Green"))
+        self.root.bind('r', lambda event: self.check_answer("Red"))
+        self.root.bind('y', lambda event: self.check_answer("Yellow"))
+        self.root.bind('b', lambda event: self.check_answer("Blue"))
 
     # Update the score
     def update_score(self):
@@ -112,6 +113,20 @@ class StroopTest:
         self.question_timer_thread = threading.Thread(target=self.question_timer_logic)
         self.question_timer_thread.daemon = True  # Set daemon to True so the thread will exit when the main program exits
         self.question_timer_thread.start()
+
+    # Thread to play music when the game starts
+    def play_music(self):
+        import pygame
+        pygame.mixer.init()
+        pygame.mixer.music.load("clock.mp3")
+        pygame.mixer.music.play(6)
+
+    def play_music_thread(self):
+        self.play_music_thread = threading.Thread(target=self.play_music)
+        # Set daemon to True so the thread will exit when the main program exits
+        self.play_music_thread.daemon = True
+        self.play_music_thread.start()
+
         
     def question_timer_logic(self):
         while self.remaining_time > 0:
@@ -161,6 +176,10 @@ class StroopTest:
         for widget in self.buttons_frame.winfo_children():
             widget.config(state=tk.DISABLED)
         self.write_summary_to_csv()
+        # stop the music
+        import pygame
+        pygame.mixer.init()
+        pygame.mixer.music.stop()
         self.root.after(2000, self.root.destroy) 
         if self.callback:
             self.callback()
@@ -243,23 +262,11 @@ class StroopTest:
 if __name__ == "__main__":
     root = tk.Tk()
 
+    #get user's window width and height
+    window_width = root.winfo_screenwidth()
+    window_height = root.winfo_screenheight()
 
-    # Center the window
-    window_width = 1800  # Set to your desired width
-    window_height = 1000  # Set to your desired height
-
-        
-    # Fix the window size
-    root.minsize(window_width, window_height)  # Set to your desired width and height
-    root.maxsize(1960, 1080)  # Set to your desired width and height
-
-    screen_width = root.winfo_screenwidth()
-    screen_height = root.winfo_screenheight()
-
-    x_coordinate = int((screen_width / 2) - (window_width / 2))
-    y_coordinate = int((screen_height / 2) - (window_height / 2))
-
-    root.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
+    root.geometry(f"{window_width}x{window_height}")
 
     app = StroopTest(root, username="testUserStroop")
     root.mainloop()
