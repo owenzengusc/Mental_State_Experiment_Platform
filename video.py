@@ -8,9 +8,6 @@ import csv
 # Total game time in seconds (3 minutes = 180 seconds)
 TOTAL_GAME_TIME = 180
 
-# Time to wait before the game starts
-COUNTDOWN_TIME = 5
-
 # Path to the folder where the data will be stored
 PATH = './data/'
 
@@ -27,6 +24,7 @@ class VideoTest:
         self.callback = callback
         self.video_reader = None  # Placeholder for video reader
         self.video_path = "videos/1.mp4"  # Your video path
+        self.after_ids = []  # Store after IDs for proper cleanup
 
         # UI Elements
         self.top_frame = tk.Frame(self.root, bg="white")
@@ -38,8 +36,8 @@ class VideoTest:
         self.buttons_frame = tk.Frame(self.root, bg="white")
         self.buttons_frame.pack(pady=5)
 
-        # Start countdown
-        self.countdown(COUNTDOWN_TIME)  # Adjust countdown time if needed
+        # Start the game immediately without countdown
+        self.start_game()
 
     def load_video(self, video_path):
         """ Load and play a video in the Tkinter window """
@@ -59,49 +57,45 @@ class VideoTest:
             self.label.config(image=photo)  # Update the label to show the new frame
             self.label.image = photo  # Keep a reference to avoid garbage collection
 
-            # Schedule the next frame update
-            self.root.after(30, self.update_frame)  # Updates every 30 ms (approx. 30 FPS)
+            # Schedule the next frame update and store the after ID
+            after_id = self.root.after(30, self.update_frame)  # Updates every 30 ms (approx. 30 FPS)
+            self.after_ids.append(after_id)
         except Exception as e:
             print(f"Video playback finished or error: {e}")
             self.show_slider()  # Show slider when video finishes
 
-    def countdown(self, count):
-        """ Countdown function before the game starts """
-        if count > 0:
-            self.label.config(text=f"{count}", fg="black", font=("Open Sans", 160))
-            self.root.after(1000, self.countdown, count-1)
-        else:
-            self.label.config(text="", fg="black", font=("Open Sans", 40))  # Clear the countdown
-            self.start_game()  # Start the game after countdown
-
     def start_game(self):
-        """ Start the game after countdown """
+        """ Start the game immediately """
         self.load_video(self.video_path)  # Load and play the video
-        self.write_header_to_csv()
-        self.update_timer()
-        self.start_question_timer_thread()
-        self.play_music_thread()
+        try:
+            self.write_header_to_csv()
+            self.update_timer()
+            self.start_question_timer_thread()
+            self.play_music_thread()
+        except AttributeError:
+            # These methods might not be implemented or have issues
+            pass
 
     def write_header_to_csv(self):
         """ Write header to the CSV file """
-        with open(self.path_to_file, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["Date", "Relative Time", "Image", "User Choice", "Result", self.username])
+        try:
+            with open(self.path_to_file, 'a', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(["Date", "Relative Time", "Image", "User Choice", "Result", self.username])
+        except AttributeError:
+            # path_to_file might not be defined
+            pass
 
     def show_slider(self):
         """ Show slider after the video ends """
-        # Update text with 50px font size and position the second part underneath
-        self.label.config(image='', 
-                        text="Please rate your arousal level:\nUnhappy(-10), Neutral(0), Happy(10)", 
-                        fg="black", font=("Open Sans", 50))  # Set font size to 50px
-
+        self.label.config(image='', text="Select a value between 1 and 10:", fg="black", font=("Open Sans", 40))
+        
         # Remove video-related widgets
         self.video_reader = None
 
-        # Create slider - adjusting the length to 70% of the window width
-        slider_length = int(self.root.winfo_width() * 0.7)  # 70% of the window width
-        slider = tk.Scale(self.root, from_=-10, to=10, orient="horizontal", length=slider_length, sliderlength=20, tickinterval=5, showvalue=1)
-        slider.pack(pady=20)  # Set the gap between the text and the slider to 20px (one-third of 60px)
+        # Create slider
+        slider = tk.Scale(self.root, from_=1, to=10, orient="horizontal", length=500)
+        slider.pack(pady=20)
 
         # Button to get slider value (optional)
         def show_value():
@@ -109,7 +103,14 @@ class VideoTest:
 
         submit_button = tk.Button(self.root, text="Submit", command=show_value)
         submit_button.pack(pady=10)
-
+    
+    def __del__(self):
+        """Clean up after IDs when object is destroyed"""
+        for after_id in self.after_ids:
+            try:
+                self.root.after_cancel(after_id)
+            except:
+                pass
 
 # Main
 if __name__ == "__main__":

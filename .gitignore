@@ -1,3 +1,6 @@
 testcode/
 pyvenv.cfg
 __pycache__/
+
+# all the csv files in the data folder
+data/

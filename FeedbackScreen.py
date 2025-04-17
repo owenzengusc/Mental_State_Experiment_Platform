@@ -9,6 +9,10 @@ class FeedbackScreen:
         self.root = root
         self.username = username
         self.path_to_file = PATH + 'feedback.csv'
+        # Define missing attributes
+        self.bg_color = "white"
+        self.font_large = ("Open Sans", 48)
+        
         #get user's window width and height
         window_width = root.winfo_screenwidth()
         window_height = root.winfo_screenheight()
@@ -19,7 +23,7 @@ class FeedbackScreen:
         self.root.configure(bg=self.bg_color)
         
         # Title
-        self.title_label = tk.Label(root, "Feedback Screen", font=self.font_large, bg=self.bg_color, fg="#9ba8ee")
+        self.title_label = tk.Label(root, text="Feedback Screen", font=self.font_large, bg=self.bg_color, fg="#9ba8ee")
         self.title_label.pack(pady=70, anchor=tk.CENTER)
 
         self.label = tk.Label(root, text="Please rate the experiment from 1-5 and provide your feedback:", font=("Opens Sans", 40))

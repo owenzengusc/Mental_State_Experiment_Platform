@@ -1,8 +1,0 @@
-Event,Start Time,End Time,Duration (milliseconds)
-Program Start,2025-01-22 17:23:56.555,,
-Cold Pressor Test Start,2025-01-22 17:24:36.042,,
-CPT Initial Relaxation Start,2025-01-22 17:24:36.192,,
-CPT Initial Relaxation End,2025-01-22 17:24:36.192,2025-01-22 17:27:36.492,180299
-CPT Test Start,2025-01-22 17:27:36.493,,
-Cold Pressor Test End,2025-01-22 17:24:36.042,2025-01-22 17:28:14.905,218862
-Program End,2025-01-22 17:23:56.555,2025-01-22 17:28:16.514,259958
