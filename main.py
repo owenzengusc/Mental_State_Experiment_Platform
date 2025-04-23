@@ -12,10 +12,13 @@ from InstructionScreen import InstructionScreen
 from video import VideoTest
 from RelaxationScreen import show_relaxation_screen
 from datetime import datetime
+from window_utils import set_responsive_geometry, get_responsive_window_size
 import json
 import csv
 import os
 
+# Constants adjusted to be relative rather than absolute
+# These will be used as fallbacks if responsive sizing fails
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 1000
 TEST_WINDOW_WIDTH = 1960
@@ -103,7 +106,7 @@ def store_user_info(name, age, gender):
         writer.writerow([name, age, gender, timestamp])
 
 def show_instruction_screen(test_name):
-    instruction_window = create_new_window(test_name, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT)
+    instruction_window = create_new_window(test_name, window_type="test")
     if test_name == "StroopTest":
         app = InstructionScreen(instruction_window, "StroopTest", instruction_window.destroy)
     elif test_name == "MathTest":
@@ -113,6 +116,8 @@ def show_instruction_screen(test_name):
     # TODO 3: Add the ImageTest Test
     elif test_name == "ImageTest":
         app = InstructionScreen(instruction_window, "ImageTest", instruction_window.destroy)
+    elif test_name == "VideoTest":
+        app = InstructionScreen(instruction_window, "VideoTest", instruction_window.destroy)
     instruction_window.mainloop()
 
 def execute_sequence(selected_tests, ppl):
@@ -154,7 +159,7 @@ def execute_sequence(selected_tests, ppl):
             log_event("StroopTest Start", test_start_time, None, None, username=ppl.name)
             
             stroop_test_window = tk.Tk()
-            stroop_test_window.geometry(f"{TEST_WINDOW_WIDTH}x{TEST_WINDOW_HEIGHT}+{(stroop_test_window.winfo_screenwidth() - TEST_WINDOW_WIDTH) // 2}+{(stroop_test_window.winfo_screenheight() - TEST_WINDOW_HEIGHT) // 2}")
+            set_responsive_geometry(stroop_test_window, "test")
             app = StroopTest(stroop_test_window, ppl.name)
             stroop_test_window.mainloop()
             
@@ -168,7 +173,7 @@ def execute_sequence(selected_tests, ppl):
             log_event("MathTest Start", test_start_time, None, None, username=ppl.name)
             
             math_test_window = tk.Tk()
-            math_test_window.geometry(f"{TEST_WINDOW_WIDTH}x{TEST_WINDOW_HEIGHT}+{(math_test_window.winfo_screenwidth() - TEST_WINDOW_WIDTH) // 2}+{(math_test_window.winfo_screenheight() - TEST_WINDOW_HEIGHT) // 2}")
+            set_responsive_geometry(math_test_window, "test")
             app = MathTest(math_test_window, ppl.name)
             math_test_window.mainloop()
             
@@ -182,7 +187,7 @@ def execute_sequence(selected_tests, ppl):
             log_event("ImageTest Start", test_start_time, None, None, username=ppl.name)
             
             image_test_window = tk.Tk()
-            image_test_window.geometry(f"{TEST_WINDOW_WIDTH}x{TEST_WINDOW_HEIGHT}+{(image_test_window.winfo_screenwidth() - TEST_WINDOW_WIDTH) // 2}+{(image_test_window.winfo_screenheight() - TEST_WINDOW_HEIGHT) // 2}")
+            set_responsive_geometry(image_test_window, "test")
             app = ImageTest(image_test_window, ppl.name)
             image_test_window.mainloop()
             
@@ -192,10 +197,12 @@ def execute_sequence(selected_tests, ppl):
             
         # Handle Videos
         elif test_id == "VideoTest":
+            show_instruction_screen("VideoTest")
             video_start_time = datetime.now()
             log_event('Video Feedback Start', video_start_time, None, None, username=ppl.name)
             
             video_window = tk.Tk()
+            set_responsive_geometry(video_window, "test")
             app = VideoTest(video_window, ppl.name)
             video_window.mainloop()
             
@@ -225,6 +232,7 @@ def execute_sequence(selected_tests, ppl):
     
     # Final feedback screen
     feedback_window = tk.Tk()
+    set_responsive_geometry(feedback_window, "main")
     app = FeedbackScreen(feedback_window, ppl.name)
     feedback_window.mainloop()
     
@@ -234,23 +242,30 @@ def execute_sequence(selected_tests, ppl):
     log_event('Program End', program_start_time, program_end_time, duration, username=ppl.name)
 
 def main():
-    pre_window = create_new_window("Cognitive Experiments", 800, 600)
-    canvas_main = tk.Canvas(pre_window, width=800, height=600, bg="white")
+    pre_window = create_new_window("Cognitive Experiments", window_type="main")
+    
+    # Get the actual window dimensions now that it's sized responsively
+    window_width = pre_window.winfo_width()
+    window_height = pre_window.winfo_height()
+    if window_width <= 1:  # Window not fully initialized yet
+        window_width, window_height = get_responsive_window_size("main")
+    
+    canvas_main = tk.Canvas(pre_window, width=window_width, height=window_height, bg="white")
     canvas_main.pack(fill="both", expand=True)
 
     # Title
     label_title = tk.Label(pre_window, text="Cognitive Experiments", font=("SF Pro Display", 48, "bold"), bg="white", fg="#007AFF")
-    canvas_main.create_window(400, 60, window=label_title)
+    canvas_main.create_window(window_width//2, 60, window=label_title)
 
     # Directions
     directions1 = tk.Label(pre_window, text="Select the experiments you would like to participate in.", font=("SF Pro Text", 15), bg="white", fg="#3a3d42")
-    canvas_main.create_window(400, 115, window=directions1)
+    canvas_main.create_window(window_width//2, 115, window=directions1)
     directions2 = tk.Label(pre_window, text="Your responses will be recorded. The session duration will vary based on your selection.", font=("SF Pro Text", 15), bg="white", fg="#3a3d42")
-    canvas_main.create_window(400, 140, window=directions2)
+    canvas_main.create_window(window_width//2, 140, window=directions2)
 
     # Create a main content frame to organize everything
     main_content = tk.Frame(pre_window, bg="white")
-    canvas_main.create_window(400, 330, window=main_content)
+    canvas_main.create_window(window_width//2, window_height//2, window=main_content)
     
     # Test selection frame - left side
     test_selection_frame = tk.Frame(main_content, bg="white")
@@ -425,7 +440,7 @@ def main():
         command=lambda: get_user_name(pre_window, entry_name, entry_age, entry_gender, canvas_main, checkbox_vars),
         state="disabled"  # Initially disabled
     )
-    canvas_main.create_window(400, 520, window=start_button)
+    canvas_main.create_window(window_width//2, int(window_height * 0.85), window=start_button)
     
     # Function to update start button state
     def update_start_button():

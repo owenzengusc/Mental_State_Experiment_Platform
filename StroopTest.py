@@ -40,6 +40,20 @@ class StroopTest:
         self.root = root
         self.root.title("Stroop Test")
         self.root.configure(bg="black")
+        
+        # Get window dimensions from the already configured window
+        self.window_width = self.root.winfo_width()
+        self.window_height = self.root.winfo_height()
+        if self.window_width <= 1:  # Window not fully initialized yet
+            self.window_width = self.root.winfo_screenwidth() * 0.85
+            self.window_height = self.root.winfo_screenheight() * 0.85
+        
+        # Thread control flag
+        self.running = True
+        
+        # Add proper window close handler
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        
         # Initialize the game variables
         self.username = username
         self.start_time = time.time()
@@ -82,19 +96,43 @@ class StroopTest:
         self.countdown(COUNTDOWN_TIME)
         self.callback = callback 
         self.question_timer_thread = None  # Add this line to create a placeholder for the thread
+        self.music_playing = False
+        self.pygame_initialized = False
         
+    def on_closing(self):
+        """Handle window closing event properly"""
+        self.running = False  # Set flag to stop threads
+        
+        # Stop any music
+        self.stop_music()
+        
+        # Allow time for threads to notice the flag change
+        time.sleep(0.1)
+        
+        # Close the window
+        try:
+            self.root.destroy()
+        except tk.TclError:
+            pass  # Window might already be destroyed
+            
+        # Call the callback if provided
+        if self.callback:
+            self.callback()
         
     # Start the game after the countdown
     def countdown(self, count):
-        if count > 0:
+        if count > 0 and self.running:
             self.label.config(text=str(count), fg="white")
             self.root.after(1000, self.countdown, count-1)
-        else:
+        elif self.running:
             self.label.config(text="", fg="black")  # Clear the countdown number
             self.start_game()  # Start the game after countdown
 
     # Start the game
     def start_game(self):
+        if not self.running:
+            return
+            
         self.write_header_to_csv()
         self.update_timer()
         self.start_question_timer_thread()  # Use the new method to start the thread
@@ -118,10 +156,26 @@ class StroopTest:
 
     # Thread to play music when the game starts
     def play_music(self):
-        import pygame
-        pygame.mixer.init()
-        pygame.mixer.music.load("clock.mp3")
-        pygame.mixer.music.play(6)
+        try:
+            import pygame
+            if not self.pygame_initialized:
+                pygame.mixer.init()
+                self.pygame_initialized = True
+            pygame.mixer.music.load("clock.mp3")
+            pygame.mixer.music.play(-1)  # Play indefinitely until stopped
+            self.music_playing = True
+        except Exception as e:
+            print(f"Error playing music: {e}")
+
+    def stop_music(self):
+        try:
+            if self.music_playing:
+                import pygame
+                if self.pygame_initialized:
+                    pygame.mixer.music.stop()
+                    self.music_playing = False
+        except Exception as e:
+            print(f"Error stopping music: {e}")
 
     def play_music_thread(self):
         self.play_music_thread = threading.Thread(target=self.play_music)
@@ -131,82 +185,131 @@ class StroopTest:
 
         
     def question_timer_logic(self):
-        while self.remaining_time > 0:
-            if not self.answered:
-                self.total_questions += 1
-                self.miss_count += 1
-                self.update_score()
-                self.write_miss_to_csv()
-                self.label.config(text="", fg="black")
-                self.root.update()
-            self.answered = False
-            self.generate_question()
-            time.sleep(1 / self.current_frequency)  # Use time.sleep instead of self.root.after
-            self.current_frequency = min(self.current_frequency + INCREASE_RATE, MAX_QUESTION_FREQUENCY)
+        while self.running and self.remaining_time > 0:
+            try:
+                if not self.answered:
+                    self.total_questions += 1
+                    self.miss_count += 1
+                    self.update_score()
+                    self.write_miss_to_csv()
+                    # Only update UI if still running
+                    if self.running:
+                        self.root.after_idle(self.update_label_empty)
+                self.answered = False
+                if self.running:
+                    self.root.after_idle(self.generate_question)
+                time.sleep(1 / self.current_frequency)  # Use time.sleep instead of self.root.after
+                self.current_frequency = min(self.current_frequency + INCREASE_RATE, MAX_QUESTION_FREQUENCY)
+            except Exception as e:
+                # Thread error, likely UI object destroyed
+                if self.running:
+                    print(f"Thread error: {e}")
+                break
 
+    def update_label_empty(self):
+        """Update label text to empty - safe to call from thread"""
+        if self.running:
+            try:
+                self.label.config(text="", fg="black")
+            except tk.TclError:
+                # Widget probably destroyed
+                pass
 
     # Update the timer
     def update_timer(self):
+        if not self.running:
+            return
+            
         if self.remaining_time > 0:
             self.remaining_time -= 1
-            self.time_label.config(text=f"Time: {self.remaining_time}")
-            self.root.after(1000, self.update_timer)
+            try:
+                self.time_label.config(text=f"Time: {self.remaining_time}")
+                self.root.after(1000, self.update_timer)
+            except tk.TclError:
+                # Widget probably destroyed
+                pass
         else:
             self.end_game()
 
     # Update the question timer    
     def question_timer(self):
-        if self.remaining_time <= 0:
+        if not self.running or self.remaining_time <= 0:
             return
-        if not self.answered:
-            self.total_questions += 1  
-            self.miss_count += 1
-            self.update_score()
-            self.write_miss_to_csv()  # Record the miss
-            self.label.config(text="", fg="black")  # Hide the question
-            self.root.update()
-        self.answered = False
-        self.generate_question()
-        self.root.after(int(1000 / self.current_frequency), self.question_timer)  # Adjusted for current frequency
-        # Increase the frequency for the next question, but don't exceed the maximum
-        self.current_frequency = min(self.current_frequency + INCREASE_RATE, MAX_QUESTION_FREQUENCY)
-        #self.speed_label.config(text=f"Speed: {self.current_frequency:.2f} Q/s")
+            
+        try:
+            if not self.answered:
+                self.total_questions += 1  
+                self.miss_count += 1
+                self.update_score()
+                self.write_miss_to_csv()  # Record the miss
+                self.label.config(text="", fg="black")  # Hide the question
+            self.answered = False
+            self.generate_question()
+            self.root.after(int(1000 / self.current_frequency), self.question_timer)  # Adjusted for current frequency
+            # Increase the frequency for the next question, but don't exceed the maximum
+            self.current_frequency = min(self.current_frequency + INCREASE_RATE, MAX_QUESTION_FREQUENCY)
+        except tk.TclError:
+            # Widget probably destroyed
+            pass
 
     # Game over
     def end_game(self):
-        self.label.config(text="Game Over", fg="white")
-        for widget in self.buttons_frame.winfo_children():
-            widget.config(state=tk.DISABLED)
+        if not self.running:
+            return
+            
+        try:
+            self.label.config(text="Game Over", fg="white")
+            for widget in self.buttons_frame.winfo_children():
+                widget.config(state=tk.DISABLED)
+        except tk.TclError:
+            # Widget probably destroyed
+            pass
+            
         self.write_summary_to_csv()
+        self.running = False
         # stop the music
-        import pygame
-        pygame.mixer.init()
-        pygame.mixer.music.stop()
-        self.root.after(2000, self.root.destroy) 
+        self.stop_music()
+        
+        try:
+            self.root.after(2000, self.root.destroy)
+        except tk.TclError:
+            # Window might already be destroyed
+            pass
+            
         if self.callback:
             self.callback()
 
 
     def generate_question(self):
-        # Ensure that two consecutive words are not the same
-        while True:
-            self.word, self.color = random.choice(list(colors.items()))
-            if self.word != self.previous_word:
-                break
+        if not self.running:
+            return
+            
+        try:
+            # Ensure that two consecutive words are not the same
+            while True:
+                self.word, self.color = random.choice(list(colors.items()))
+                if self.word != self.previous_word:
+                    break
 
-        # Ensure that two consecutive words don't have the same display color
-        while True:
-            display_color = random.choice(list(colors.values()))
-            if display_color != self.previous_display_color and display_color != self.color:
-                break
+            # Ensure that two consecutive words don't have the same display color
+            while True:
+                display_color = random.choice(list(colors.values()))
+                if display_color != self.previous_display_color and display_color != self.color:
+                    break
 
-        self.previous_display_color = display_color
-        self.previous_word = self.word
-        self.label.config(text=self.word, fg=display_color)
+            self.previous_display_color = display_color
+            self.previous_word = self.word
+            self.label.config(text=self.word, fg=display_color)
+        except tk.TclError:
+            # Widget probably destroyed
+            pass
 
 
     # Check the answer
     def check_answer(self, chosen_color):
+        if not self.running:
+            return
+            
         if not self.answered:
             self.total_questions += 1
             if colors[chosen_color] == self.label.cget("fg"):
@@ -216,8 +319,11 @@ class StroopTest:
             self.update_score()
             self.write_data_to_csv(chosen_color)
             self.answered = True
-            self.label.config(text="", fg="black")  # Hide the question after answering
-            self.root.update()
+            try:
+                self.label.config(text="", fg="black")  # Hide the question after answering
+            except tk.TclError:
+                # Widget probably destroyed
+                pass
             
     # Write the header to the CSV file      
     def write_header_to_csv(self):
@@ -264,23 +370,30 @@ class StroopTest:
 if __name__ == "__main__":
     root = tk.Tk()
 
-
-    # Center the window
-    window_width = 1800  # Set to your desired width
-    window_height = 1000  # Set to your desired height
-
-        
-    # Fix the window size
-    root.minsize(window_width, window_height)  # Set to your desired width and height
-    root.maxsize(1960, 1080)  # Set to your desired width and height
-
+    # Get responsive window size (85% of screen)
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
-
+    window_width = int(screen_width * 0.85)
+    window_height = int(screen_height * 0.85)
+    
+    # Ensure window size is reasonable
+    window_width = min(window_width, 1920)
+    window_height = min(window_height, 1080)
+    
+    # Set minimum size constraints
+    window_width = max(window_width, 1200)
+    window_height = max(window_height, 800)
+        
+    # Set window size and position it at the center
     x_coordinate = int((screen_width / 2) - (window_width / 2))
     y_coordinate = int((screen_height / 2) - (window_height / 2))
 
+    # Apply the window geometry
     root.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
+    
+    # Set reasonable min/max sizes
+    root.minsize(min(window_width, 1000), min(window_height, 700))
+    root.maxsize(screen_width, screen_height)
 
     app = StroopTest(root, username="testUserStroop")
     root.mainloop()

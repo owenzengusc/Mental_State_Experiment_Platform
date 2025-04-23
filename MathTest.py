@@ -32,6 +32,12 @@ class MathTest:
         self.root.title("Math Test")
         self.root.configure(bg="black")
         
+        # Thread control flag
+        self.running = True
+        
+        # Add proper window close handler
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        
         self.username = username
         self.path_to_file = PATH+'mathTest_'+username+'.csv'
         self.correct_count = 0
@@ -45,55 +51,128 @@ class MathTest:
         self.prev_correct_option_idx = None
         self.answered = True
         self.current_timer_id = None
+        
+        # Top frame for timer
         self.top_frame = tk.Frame(self.root, bg="black")
         self.top_frame.pack(fill=tk.BOTH, padx=10, pady=10)
         
-        self.time_label = tk.Label(self.top_frame, text=f"Time: {self.remaining_time}", anchor='w', bg="black", fg="white")
+        # Time label
+        self.time_label = tk.Label(self.top_frame, text=f"Time: {self.remaining_time}", anchor='w', bg="black", fg="white", font=("SF Pro Display", 18))
         self.time_label.pack(side=tk.LEFT)
         
-        self.question_label = tk.Label(self.root, font=("Arial", 140), bg="black", fg="white")
+        # Question label
+        self.question_label = tk.Label(self.root, font=("SF Pro Display", 140), bg="black", fg="white")
         self.question_label.pack(pady=50, expand=True)
         
-        # Create a style object
-        style = ttk.Style()
-
-        # Configure the font for TButton style
-        style.configure('TButton', font=('Arial', 40))  # Increase 20 to your desired font size
-
-
+        # Button colors
+        self.btn_bg = "#E9E9E9"
+        self.btn_fg = "black"
+        self.btn_active_bg = "#CCCCCC"
+        self.btn_selected_bg = "#97C1A9"
+        
+        # Buttons frame - initialize but don't pack yet
         self.buttons_frame = tk.Frame(self.root, bg="black")
-        self.buttons_frame.pack(pady=20)
         
+        # Create option buttons using native tk buttons
         self.option_buttons = []
-        
         for i in range(4):
-            btn = ttk.Button(self.buttons_frame, text="")
-            btn.pack(side=tk.LEFT, padx=10)
-            btn.bind('<Button>', lambda event, idx=i: self.check_answer(idx)) 
-            btn.config (state=tk.DISABLED)
+            btn = tk.Button(
+                self.buttons_frame, 
+                text="   ",  # Initialize with space to maintain size
+                font=("SF Pro Display", 36),
+                bg=self.btn_bg,
+                fg=self.btn_fg,
+                activebackground=self.btn_active_bg,
+                activeforeground=self.btn_fg,
+                relief=tk.FLAT,
+                bd=0,
+                padx=20,
+                pady=10,
+                width=6,
+                command=lambda idx=i: self.check_answer(idx)
+            )
             self.option_buttons.append(btn)
-            
+        
         self.start_time = time.time()
         self.start_time_header = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(self.start_time))
         self.write_header_to_csv()
-        self.play_music_thread()
+        
+        # Audio state tracking
+        self.music_playing = False
+        self.pygame_initialized = False
+        
         self.countdown(COUNTDOWN)
         self.callback = callback
 
+    def on_closing(self):
+        """Handle window closing event properly"""
+        self.running = False  # Set flag to stop threads
+        
+        # Stop any music
+        self.stop_music()
+        
+        # Cancel any pending timers
+        if self.current_timer_id:
+            try:
+                self.root.after_cancel(self.current_timer_id)
+            except Exception:
+                pass
+        
+        # Allow time for threads to notice the flag change
+        time.sleep(0.1)
+        
+        # Close the window
+        try:
+            self.root.destroy()
+        except tk.TclError:
+            pass  # Window might already be destroyed
+            
+        # Call the callback if provided
+        if self.callback:
+            self.callback()
+
     def countdown(self, count):
+        if not self.running:
+            return
+            
         if count > 0:
-            self.question_label.config(text=str(count))
-            self.root.after(1000, self.countdown, count-1)
+            try:
+                self.question_label.config(text=str(count))
+                self.root.after(1000, self.countdown, count-1)
+            except tk.TclError:
+                pass  # Window might be destroyed
         else:
-            self.question_label.config(text="")
-            self.generate_question()
-            self.update_timer()
+            try:
+                self.question_label.config(text="")
+                # Now that countdown is done, show the buttons frame
+                self.buttons_frame.pack(pady=20)
+                self.play_music_thread()
+                self.generate_question()
+                self.update_timer()
+            except tk.TclError:
+                pass  # Window might be destroyed
     
     def play_music(self):
-        import pygame
-        pygame.mixer.init()
-        pygame.mixer.music.load("clock.mp3")
-        pygame.mixer.music.play(6)
+        try:
+            import pygame
+            if not self.pygame_initialized:
+                pygame.mixer.init()
+                self.pygame_initialized = True
+            pygame.mixer.music.load("clock.mp3")
+            pygame.mixer.music.play(-1)  # Play indefinitely until stopped
+            self.music_playing = True
+        except Exception as e:
+            print(f"Error playing music: {e}")
+    
+    def stop_music(self):
+        try:
+            if self.music_playing:
+                import pygame
+                if self.pygame_initialized:
+                    pygame.mixer.music.stop()
+                    self.music_playing = False
+        except Exception as e:
+            print(f"Error stopping music: {e}")
     
     def play_music_thread(self):
         self.play_music_thread = threading.Thread(target=self.play_music)
@@ -101,42 +180,57 @@ class MathTest:
         self.play_music_thread.start()
         
     def update_timer(self):
+        if not self.running:
+            return
+            
         if self.remaining_time > 0:
-            self.remaining_time -= 1
-            self.time_label.config(text=f"Time: {self.remaining_time}")
-            self.root.after(1000, self.update_timer)
+            try:
+                self.remaining_time -= 1
+                self.time_label.config(text=f"Time: {self.remaining_time}")
+                self.root.after(1000, self.update_timer)
+            except tk.TclError:
+                pass  # Window might be destroyed
         else:
             self.end_game()
 
     def generate_question(self):
-        if self.remaining_time <= 0:
+        if not self.running or self.remaining_time <= 0:
             return
 
-        self.question_start_time = time.time()
-        self.expression, self.answer = self.create_math_expression()
-        self.question_label.config(text=self.expression)
-        
-        options = [self.answer]
-        while len(options) < 4:
-            option = random.randint(1, 100)
-            if option not in options:
-                options.append(option)
-        
-        while True:
-            random.shuffle(options)
-            self.correct_option_idx = options.index(self.answer)
-            if self.correct_option_idx != self.prev_correct_option_idx:
-                break
+        try:
+            self.question_start_time = time.time()
+            self.expression, self.answer = self.create_math_expression()
+            self.question_label.config(text=self.expression)
+            
+            options = [self.answer]
+            while len(options) < 4:
+                option = random.randint(1, 100)
+                if option not in options:
+                    options.append(option)
+            
+            while True:
+                random.shuffle(options)
+                self.correct_option_idx = options.index(self.answer)
+                if self.correct_option_idx != self.prev_correct_option_idx:
+                    break
 
-        self.prev_correct_option_idx = self.correct_option_idx
-        
-        for i, btn in enumerate(self.option_buttons):
-            btn.config(text=str(options[i]), state=tk.NORMAL)
+            self.prev_correct_option_idx = self.correct_option_idx
+            
+            # Configure all buttons first before showing them
+            for i, btn in enumerate(self.option_buttons):
+                btn.config(text=str(options[i]), bg=self.btn_bg, fg=self.btn_fg)
+                # Pack each button if not already packed
+                if not btn.winfo_ismapped():
+                    btn.pack(side=tk.LEFT, padx=15)
+            
+            self.buttons_frame.update()  # Force update of the frame
 
-        self.answered = False
-        if self.current_timer_id:
-            self.root.after_cancel(self.current_timer_id)
-        self.current_timer_id = self.root.after(QUESTION_DISPLAY_TIME * 1000, self.hide_question)
+            self.answered = False
+            if self.current_timer_id:
+                self.root.after_cancel(self.current_timer_id)
+            self.current_timer_id = self.root.after(QUESTION_DISPLAY_TIME * 1000, self.hide_question)
+        except tk.TclError:
+            pass  # Window might be destroyed
 
     def create_math_expression(self):
         while True:
@@ -188,45 +282,96 @@ class MathTest:
             except:
                 pass
 
-
-
     def check_answer(self, idx):
-        self.answered = True
-        self.total_questions += 1
-        if idx == self.correct_option_idx:
-            self.correct_count += 1
-            self.write_correct_to_csv()
-            # Increase difficulty
-            if self.max_num_operations < MAX_NUM_OPERATIONS:
-                self.max_num_operations += DIFFICULTY_INCREMENT
-        else:
-            self.wrong_count += 1
-            self.write_wrong_to_csv(idx)
-        self.generate_question()
-
+        if not self.running:
+            return
+            
+        # Prevent multiple clicks
+        if not self.answered:
+            self.answered = True
+            
+            try:
+                # Highlight the selected button
+                for i, btn in enumerate(self.option_buttons):
+                    if i == idx:
+                        # Highlight selected button
+                        btn.config(bg=self.btn_selected_bg)
+                    else:
+                        # Reset other buttons
+                        btn.config(bg=self.btn_bg)
+                
+                self.root.update()  # Force update to show the highlight
+                self.root.after(200)  # Short delay to show the selection
+                
+                self.total_questions += 1
+                if idx == self.correct_option_idx:
+                    self.correct_count += 1
+                    self.write_correct_to_csv()
+                    # Increase difficulty
+                    if self.max_num_operations < MAX_NUM_OPERATIONS:
+                        self.max_num_operations += DIFFICULTY_INCREMENT
+                else:
+                    self.wrong_count += 1
+                    self.write_wrong_to_csv(idx)
+                
+                # Instead of hiding buttons, keep them visible but set to empty
+                for btn in self.option_buttons:
+                    btn.config(text="", bg=self.btn_bg)
+                    
+                # Generate the next question
+                self.generate_question()
+            except tk.TclError:
+                pass  # Window might be destroyed
 
     def hide_question(self):
-        if not self.answered:
-            self.total_questions += 1
-            self.miss_count += 1
-            self.write_miss_to_csv()
-            self.generate_question()
+        if not self.running:
+            return
+            
+        try:
+            if not self.answered:
+                self.total_questions += 1
+                self.miss_count += 1
+                self.write_miss_to_csv()
+                
+                # Instead of hiding buttons, keep them visible but set to empty
+                for btn in self.option_buttons:
+                    btn.config(text="", bg=self.btn_bg)
+                    
+                self.generate_question()
+        except tk.TclError:
+            pass  # Window might be destroyed
 
     def end_game(self):
+        if not self.running:
+            return
+            
         # Cancel any scheduled tasks
         if self.current_timer_id:
             self.root.after_cancel(self.current_timer_id)
+            
+        self.running = False
         self.answered = True
-        self.question_label.config(text="Game Over!")
-        for btn in self.option_buttons:
-            btn.config(state=tk.DISABLED)
+        
+        try:
+            self.question_label.config(text="Game Over!")
+            
+            # Keep buttons visible but empty for consistent layout
+            for btn in self.option_buttons:
+                btn.config(text="", state=tk.DISABLED)
+        except tk.TclError:
+            pass  # Window might be destroyed
+            
         self.write_summary_to_csv()
+        
         # stop the music
-        import pygame
-        pygame.mixer.init()
-        pygame.mixer.music.stop()
+        self.stop_music()
+        
         # close the window after 2s
-        self.root.after(2000, self.root.destroy) 
+        try:
+            self.root.after(2000, self.root.destroy) 
+        except tk.TclError:
+            pass  # Window might be destroyed
+            
         if self.callback:
             self.callback()
 
@@ -265,8 +410,6 @@ class MathTest:
             writer = csv.writer(file)
             writer.writerow([current_time, relative_time, self.expression, self.answer, user_choice, result, self.username])
 
-
-
     def write_summary_to_csv(self):
         # Read the entire CSV file into memory
         with open(self.path_to_file, 'r', newline='') as readFile:
@@ -285,21 +428,29 @@ class MathTest:
 
 if __name__ == "__main__":
     root = tk.Tk()
-        # Center the window
-    window_width = 1800  # Set to your desired width
-    window_height = 1000  # Set to your desired height
-
-        
-    # Fix the window size
-    root.minsize(window_width, window_height)  # Set to your desired width and height
-    root.maxsize(1960, 1080)  # Set to your desired width and height
-
+    
+    # Get responsive window size (85% of screen)
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
-
+    window_width = int(screen_width * 0.85)
+    window_height = int(screen_height * 0.85)
+    
+    # Ensure window size is reasonable
+    window_width = min(window_width, 1920)
+    window_height = min(window_height, 1080)
+    
+    # Set minimum size constraints
+    window_width = max(window_width, 1200)
+    window_height = max(window_height, 800)
+    
+    # Apply the window geometry
     x_coordinate = int((screen_width / 2) - (window_width / 2))
     y_coordinate = int((screen_height / 2) - (window_height / 2))
-
     root.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
+    
+    # Set reasonable min/max sizes
+    root.minsize(min(window_width, 1000), min(window_height, 700))
+    root.maxsize(screen_width, screen_height)
+    
     app = MathTest(root, "testUser")
     root.mainloop()
