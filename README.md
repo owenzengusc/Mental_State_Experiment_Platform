@@ -13,22 +13,30 @@ This project provides an interface for tests in [Khan Lab @ USC](https://khan.us
 - **Feedback Screen**: Displays feedback to the user after completing a test.
 - **Instruction Screen**: Provides instructions to the user before starting a test.
 - **Test Editor**: Allows users to modify, add, or delete tests.
-- **Supported Tests**: Currently supports `MathTest`, `StroopTest`, and `ColdPressorTest`.
+- **Supported Tests**: Currently supports `MathTest`, `StroopTest`, `ColdPressorTest`, `ImageTest`, and `VideoTest`.
+- **Relaxation Screens**: Includes relaxation periods before and after tests with calming audio.
 - **Logging Function**: Logs events with timestamps and durations to CSV files, covering the entire testing process.
+- **Responsive UI**: All windows automatically scale based on the user's screen resolution.
 
 ## File Structure
 
-data/: Contains the output data and feedback.
-test/: Contains a JSON file with test configurations.
-FeedbackScreen.py: Handles the feedback display after tests.
-InstructionScreen.py: Displays instructions before each test.
-main.py: The main entry point for the application.
-MathTest.py: Logic and interface for the Math Test.
-StroopTest.py: Logic and interface for the Stroop Test.
-ColdPressorTest.py: Logic and interface for the Cold Pressor Test.
-user.py: User-related functionalities.
-window.py: Basic window creation and management functions.
-test_editor: A utility to modify, add, or delete tests.
+- `data/`: Contains the output data and feedback.
+- `test/`: Contains a JSON file with test configurations.
+- `images/`: Contains images used by the ImageTest.
+- `videos/`: Contains video files used by the VideoTest.
+- `FeedbackScreen.py`: Handles the feedback display after tests.
+- `InstructionScreen.py`: Displays instructions before each test.
+- `main.py`: The main entry point for the application.
+- `MathTest.py`: Logic and interface for the Math Test.
+- `StroopTest.py`: Logic and interface for the Stroop Test.
+- `ColdPressorTest.py`: Logic and interface for the Cold Pressor Test.
+- `ImageTest.py`: Logic and interface for the Visual Stimulation Test.
+- `video.py`: Logic and interface for the Affective Videos Test.
+- `RelaxationScreen.py`: Provides relaxation periods between tests.
+- `user.py`: User-related functionalities.
+- `window.py`: Basic window creation and management functions.
+- `window_utils.py`: Utilities for responsive window sizing.
+- `test_editor`: A utility to modify, add, or delete tests.
 
 ## Getting Started
 
@@ -152,28 +160,28 @@ If you wish to set up and customize the test parameters, follow the steps below:
 
 ### 1. Adjusting the Test Duration:
 
-Both the MathTest and StroopTest have a default duration of 3 minutes. To modify this:
+The various tests have default durations that can be modified:
 
-- Open MathTest.py or StroopTest.py.
-- Locate the line TOTAL_GAME_TIME = 60*3.
-- Change the 3 to your desired duration in minutes.
+- In `MathTest.py` or `StroopTest.py`: Locate the line `TOTAL_GAME_TIME = 60*3` and change the `3` to your desired duration in minutes.
+- In `ImageTest.py`: Locate the line `TOTAL_GAME_TIME = 10*10` and adjust as needed.
+- In `RelaxationScreen.py`: The default duration is 180 seconds (3 minutes), which can be adjusted when calling the function.
 
 ### 2. Modifying the Math Test Parameters:
 
 In MathTest.py:
 
-- MAX_NUM_OPERATIONS and MIN_NUM_OPERATIONS: Adjust the range of operations in the math expression.
-- DIFFICULTY_INCREMENT: Control how much to increase the difficulty.
-- TIME_THRESHOLD: Set the time threshold for adjusting difficulty.
-- PARENTHESIS_PROBABILITY: Adjust the probability of including parentheses in the expression.
+- `MAX_NUM_OPERATIONS` and `MIN_NUM_OPERATIONS`: Adjust the range of operations in the math expression.
+- `DIFFICULTY_INCREMENT`: Control how much to increase the difficulty.
+- `TIME_THRESHOLD`: Set the time threshold for adjusting difficulty.
+- `PARENTHESIS_PROBABILITY`: Adjust the probability of including parentheses in the expression.
 
 ### 3. Modifying the Stroop Test Parameters:
 
 In StroopTest.py:
 
-- QUESTION_FREQUENCY: Set the initial frequency of questions per second.
-- INCREASE_RATE: Control the rate at which the question frequency increases.
-- MAX_QUESTION_FREQUENCY: Set the maximum question frequency.
+- `QUESTION_FREQUENCY`: Set the initial frequency of questions per second.
+- `INCREASE_RATE`: Control the rate at which the question frequency increases.
+- `MAX_QUESTION_FREQUENCY`: Set the maximum question frequency.
 
 ### 4. Modifying the Cold Pressor Test Parameters
 
@@ -183,16 +191,31 @@ In `ColdPressorTest.py`, you can adjust the durations of different phases of the
 - `test_duration`: Duration for which the user keeps their hand in cold water (in seconds). Default is 180 seconds (3 minutes).
 - `post_test_relaxation_duration`: Post-test relaxation duration (in seconds). Default is 175 seconds to accommodate a 5-second recording, making a total of 3 minutes.
 
-### 5. Adjusting Window and Test Duration Parameters in `main.py:
+### 5. Modifying the Image Test Parameters
 
-In `main.py`, there are parameters that define the window dimensions and the average test duration. If you modify the test duration in the individual test files (`MathTest.py` or `StroopTest.py`), ensure you also update the `AVERAGE_TEST_DURATION` parameter (unit of minute) in `main.py` to reflect the changes.
+In `ImageTest.py`, you can adjust:
+
+- `TOTAL_GAME_TIME`: Total time for image display (in seconds). Default is 100 seconds.
+- Add your own images by placing them in the appropriate folders within the `images` directory.
+
+### 6. Modifying the Video Test Parameters
+
+In `video.py`, you can:
+
+- Change the video files by updating the `video_path` variable.
+- Place your video files in the `videos` directory.
+
+### 7. Adjusting Window and Test Duration Parameters in `main.py`:
+
+In `main.py`, there are parameters that define the window dimensions and the average test duration. If you modify the test duration in the individual test files, ensure you also update the `AVERAGE_TEST_DURATION` parameter (unit of minute) in `main.py` to reflect the changes.
 ```python
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 1000
-TEST_WINDOW_WIDTH = 900
-TEST_WINDOW_HEIGHT = 700
+TEST_WINDOW_WIDTH = 1960
+TEST_WINDOW_HEIGHT = 1080
 AVERAGE_TEST_DURATION = 5
 ```
+
 ## Logging Function
 
 The logging function logs events with timestamps and durations in a CSV file named after the user's name. This is used across all tests, including the Cold Pressor Test.
@@ -216,6 +239,8 @@ Video 1 End,2024-03-20 15:31:47.313,2024-03-20 15:32:01.432,14118
 Video 2 Start,2024-03-20 15:32:03.992,,
 Video 2 End,2024-03-20 15:32:03.992,2024-03-20 15:32:19.924,15932
 Video Feedback End,2024-03-20 15:31:44.791,2024-03-20 15:32:23.112,38321
+ImageTest Start,2024-03-20 15:32:25.071,,
+ImageTest End,2024-03-20 15:32:25.071,2024-03-20 15:32:35.071,10000
 Cold Pressor Test Start,2024-03-20 15:32:25.071,,
 CPT Initial Relaxation Start,2024-03-20 15:32:25.569,,
 CPT Initial Relaxation End,2024-03-20 15:32:25.569,2024-03-20 15:32:35.571,10002
@@ -224,6 +249,8 @@ CPT Test End,2024-03-20 15:32:35.573,2024-03-20 15:32:45.576,10002
 CPT Post Test Relaxation Start,2024-03-20 15:32:50.578,,
 CPT Post Test Relaxation End,2024-03-20 15:32:50.578,2024-03-20 15:33:00.581,10003
 Cold Pressor Test End,2024-03-20 15:32:25.071,2024-03-20 15:33:05.588,40517
+Final Relaxation Start,2024-03-20 15:33:05.590,,
+Final Relaxation End,2024-03-20 15:33:05.590,2024-03-20 15:33:07.590,2000
 Program End,2024-03-20 15:31:30.457,2024-03-20 15:33:07.723,97265
 ```
 
