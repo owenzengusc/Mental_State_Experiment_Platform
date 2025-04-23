@@ -16,19 +16,32 @@ COUNTDOWN_TIME = 5
 PATH = './data/'
 
 class ImageTest:
-    def __init__(self, root, username, callback=None):
+    def __init__(self, root, username, callback=None, use_buttons=True):
         # Create a window
         self.root = root
         self.root.title("Image Test")
-        self.root.configure(bg="#E6F3FF")
+        self.root.configure(bg="white")  # Changed to white bg
         # Initialize the game variables
         self.username = username
         self.start_time = time.time()
+        self.use_buttons = use_buttons  # Flag to control answer input method
+        self.running = True  # Flag to track if the application is still running
+        
+        # Set up closing protocol
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        
         # Create a style object
         style = ttk.Style()
 
         # This will set all ttk.Button widgets to the 'flat' relief style
-        style.configure('TButton',font=('Arial', 31), relief='flat', padding=6)
+        style.configure('TButton', font=('Arial', 40), relief='flat', padding=10)  # Increased font size
+        
+        # Button colors from MathTest
+        self.btn_bg = "#E9E9E9"
+        self.btn_fg = "black"
+        self.btn_active_bg = "#CCCCCC"
+        self.btn_selected_bg = "#97C1A9"
+        
         self.start_time_header = time.strftime('%m/%d/%Y %H:%M:%S', time.localtime())
         self.path_to_file = PATH+'imageTest_'+username+'.csv'
         self.disgusted_count = 0
@@ -40,17 +53,21 @@ class ImageTest:
         self.remaining_time = TOTAL_GAME_TIME
         self.answered = True  # Set to True initially to avoid the automatic miss at the start
         # Create the widgets
-        self.top_frame = tk.Frame(self.root, bg="#E6F3FF")
+        self.top_frame = tk.Frame(self.root, bg="white")  # Changed to white bg
         self.top_frame.pack(fill=tk.BOTH, padx=10, pady=10)
         # Create the time label on the top left
-        self.time_label = tk.Label(self.top_frame, text=f"Time: {self.remaining_time}", anchor='w', bg="#E6F3FF", fg="black")
+        self.time_label = tk.Label(self.top_frame, text=f"Time: {self.remaining_time}", anchor='w', bg="white", fg="black", font=("Arial", 18))  # Changed bg to white
         self.time_label.pack(side=tk.LEFT)
         # Create the question label in the middle
-        self.label = tk.Label(self.root, bg="#E6F3FF", wraplength=800)  # Increased wraplength for instructions
+        self.label = tk.Label(self.root, bg="white", wraplength=800)  # Changed bg to white
         self.label.pack(pady=50, expand=True)
         # Create the buttons frame at the bottom
-        self.buttons_frame = tk.Frame(self.root, bg="black")
+        self.buttons_frame = tk.Frame(self.root, bg="white")  # Changed bg to white
         self.buttons_frame.pack(pady=20)
+        
+        # Create answer buttons (initially hidden)
+        self.create_answer_buttons()
+        
         # Start the countdown before the game begins
         self.countdown(COUNTDOWN_TIME)
         self.callback = callback 
@@ -73,7 +90,72 @@ class ImageTest:
                 if filename.endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
                     file_path = os.path.join(folder, filename)
                     self.image_list.append(file_path)
+                    
+        # Initialize pygame for audio
+        try:
+            import pygame
+            pygame.mixer.init()
+        except Exception as e:
+            print(f"Error initializing pygame: {e}")
 
+    def create_answer_buttons(self):
+        # Remove any existing buttons
+        for widget in self.buttons_frame.winfo_children():
+            widget.destroy()
+            
+        if self.use_buttons:
+            # Create buttons using native tk buttons instead of ttk, matching MathTest style
+            self.disturbed_btn = tk.Button(
+                self.buttons_frame, 
+                text="Disturbed",
+                font=("SF Pro Display", 36),
+                bg=self.btn_bg,
+                fg=self.btn_fg,
+                activebackground=self.btn_active_bg,
+                activeforeground=self.btn_fg,
+                relief=tk.FLAT,
+                bd=0,
+                padx=20,
+                pady=10,
+                width=12,
+                command=lambda: self.check_answer("Disturbed")
+            )
+            self.disturbed_btn.pack(side=tk.LEFT, padx=15)
+            
+            self.neutral_btn = tk.Button(
+                self.buttons_frame, 
+                text="Neutral",
+                font=("SF Pro Display", 36),
+                bg=self.btn_bg,
+                fg=self.btn_fg,
+                activebackground=self.btn_active_bg,
+                activeforeground=self.btn_fg,
+                relief=tk.FLAT,
+                bd=0,
+                padx=20,
+                pady=10,
+                width=12,
+                command=lambda: self.check_answer("Neutral")
+            )
+            self.neutral_btn.pack(side=tk.LEFT, padx=15)
+            
+            self.pleased_btn = tk.Button(
+                self.buttons_frame, 
+                text="Pleased",
+                font=("SF Pro Display", 36),
+                bg=self.btn_bg,
+                fg=self.btn_fg,
+                activebackground=self.btn_active_bg,
+                activeforeground=self.btn_fg,
+                relief=tk.FLAT,
+                bd=0,
+                padx=20,
+                pady=10,
+                width=12,
+                command=lambda: self.check_answer("Pleased")
+            )
+            self.pleased_btn.pack(side=tk.LEFT, padx=15)
+            
     def load_image(self, image_path):
         image = Image.open(image_path)
         # Resize the image to make it bigger (adjust the size as needed)
@@ -84,12 +166,21 @@ class ImageTest:
 
     # Start the game after the countdown
     def countdown(self, count):
+        # Initialize buttons but don't show the frame until countdown is complete
+        self.create_answer_buttons()
+        self.buttons_frame.pack_forget()  # Hide buttons during countdown
+        
         if count > 0:
-            instructions = "Image Test:\n\nA series of images will be displayed.\n\nRecord your reaction to the images by pressing:\n1 (disgusted), 2 (neutral), 3 (pleased) on your keyboard.\n\nStarting in: "
-            self.label.config(text=f"{instructions}{count}", fg="black", font=("Arial", 16))
+            instructions = "Image Test:\n\nA series of images will be displayed.\n\n"
+            if self.use_buttons:
+                instructions += "Record your reaction by clicking the buttons below or pressing:\n1 (disgusted), 2 (neutral), 3 (pleased) on your keyboard.\n\n"
+            else:
+                instructions += "Record your reaction to the images by pressing:\n1 (disgusted), 2 (neutral), 3 (pleased) on your keyboard.\n\n"
+            instructions += "Starting in: "
+            self.label.config(text=f"{instructions}{count}", fg="black", font=("Arial", 24), bg="white")  # Increased font size & white bg
             self.root.after(1000, self.countdown, count-1)
         else:
-            self.label.config(text="", fg="black")  # Clear the countdown number
+            self.label.config(text="", fg="black", bg="white")  # Changed bg to white
             self.start_game()  # Start the game after countdown
 
     # Start the game
@@ -97,7 +188,7 @@ class ImageTest:
         self.write_header_to_csv()
         self.update_timer()
         self.start_question_timer_thread()
-        self.play_music_thread()
+        # self.play_music_thread()
 
         # Load and display the first image
         self.load_image(self.image_list[self.current_image_index])
@@ -107,17 +198,50 @@ class ImageTest:
         self.root.bind('1', lambda event: self.check_answer("Disturbed"))
         self.root.bind('2', lambda event: self.check_answer("Neutral"))
         self.root.bind('3', lambda event: self.check_answer("Pleased"))
+        
+        # Show buttons after countdown is complete
+        if self.use_buttons:
+            self.buttons_frame.pack(pady=20)
 
     def check_answer(self, user_choice):
+        if not self.running:
+            return
+            
+        # Highlight the selected button
+        if self.use_buttons:
+            if user_choice == "Disturbed":
+                self.disturbed_btn.config(bg=self.btn_selected_bg)
+                self.neutral_btn.config(bg=self.btn_bg)
+                self.pleased_btn.config(bg=self.btn_bg)
+            elif user_choice == "Neutral":
+                self.disturbed_btn.config(bg=self.btn_bg)
+                self.neutral_btn.config(bg=self.btn_selected_bg)
+                self.pleased_btn.config(bg=self.btn_bg)
+            elif user_choice == "Pleased":
+                self.disturbed_btn.config(bg=self.btn_bg)
+                self.neutral_btn.config(bg=self.btn_bg)
+                self.pleased_btn.config(bg=self.btn_selected_bg)
+            
+            # Force update to show selection
+            self.root.update()
+            # Short delay to show the highlight
+            self.root.after(200)
+        
         # Your existing answer checking logic here
         self.write_data_to_csv(user_choice)
         
-        if(self.image_count < len(self.image_list)):
+        # Reset button colors after a short delay
+        if self.use_buttons:
+            self.disturbed_btn.config(bg=self.btn_bg)
+            self.neutral_btn.config(bg=self.btn_bg)
+            self.pleased_btn.config(bg=self.btn_bg)
+        
+        if self.image_count < len(self.image_list):
             self.current_image_index = (self.current_image_index + 1) % len(self.image_list)
             self.load_image(self.image_list[self.current_image_index])
             self.image_count += 1
         else:
-            self.end_game()  # End the game if all images have been sho
+            self.end_game()  # End the game if all images have been shown
 
     def start_question_timer_thread(self):
         self.question_timer_thread = threading.Thread(target=self.question_timer_logic)
@@ -128,21 +252,28 @@ class ImageTest:
         # Implement your question timer logic here
         pass
 
+    # # Thread to play music when the game starts
+    # def play_music(self):
+    #     if not self.running:
+    #         return
+            
+    #     try:
+    #         import pygame
+    #         pygame.mixer.music.load("clock.mp3")
+    #         pygame.mixer.music.play(6)
+    #     except Exception as e:
+    #         print(f"Error playing music: {e}")
 
-    # Thread to play music when the game starts
-    def play_music(self):
-        import pygame
-        pygame.mixer.init()
-        pygame.mixer.music.load("clock.mp3")
-        pygame.mixer.music.play(6)
-
-    def play_music_thread(self):
-        self.play_music_thread = threading.Thread(target=self.play_music)
-        self.play_music_thread.daemon = True
-        self.play_music_thread.start()
+    # def play_music_thread(self):
+    #     self.play_music_thread = threading.Thread(target=self.play_music)
+    #     self.play_music_thread.daemon = True
+    #     self.play_music_thread.start()
 
     # Update the timer
     def update_timer(self):
+        if not self.running:
+            return
+            
         if self.remaining_time > 0:
             self.remaining_time -= 1
             self.time_label.config(text=f"Time: {self.remaining_time}")
@@ -152,19 +283,24 @@ class ImageTest:
 
     # Game over
     def end_game(self):
-        self.label.config(text="Test Over", fg="white")
+        if not self.running:
+            return
+            
+        self.label.config(text="Test Over", fg="black", font=("Arial", 24))
+        # Disable buttons
         for widget in self.buttons_frame.winfo_children():
             widget.config(state=tk.DISABLED)
         self.write_summary_to_csv()
-        # stop the music
-        import pygame
-        pygame.mixer.init()
-        pygame.mixer.music.stop()
+        
+        # Stop the music
+        self.stop_music()
+            
+        # Set running to false and close after a delay
+        self.running = False
         self.root.after(2000, self.root.destroy) 
         if self.callback:
             self.callback()
 
-        
     # Write the header to the CSV file      
     def write_header_to_csv(self):
         with open(self.path_to_file, 'a', newline='') as file:
@@ -196,24 +332,65 @@ class ImageTest:
             writer.writerow(["Start Time", "Total Questions", "Total Game Time"])
             writer.writerow([self.start_time_header, self.total_questions, TOTAL_GAME_TIME])
 
-if __name__ == "__main__":
-    root = tk.Tk()
-
-    # Center the window
-    window_width = 1800  # Set to your desired width
-    window_height = 1000  # Set to your desired height
+    def on_closing(self):
+        """Handle the window closing event"""
+        self.running = False
+        self.stop_music()
+        # Write summary before closing if any images were shown
+        if self.image_count > 0:
+            try:
+                self.write_summary_to_csv()
+            except Exception as e:
+                print(f"Error writing summary: {e}")
         
-    # Fix the window size
-    root.minsize(window_width, window_height)  # Set to your desired width and height
-    root.maxsize(2560, 1600)  # Set to your desired width and height
+        # Call callback if provided
+        if self.callback:
+            self.callback()
+            
+        # Destroy the window
+        self.root.destroy()
+        
+    def stop_music(self):
+        """Stop the music playback"""
+        try:
+            import pygame
+            if pygame.mixer.get_init() and pygame.mixer.music.get_busy():
+                pygame.mixer.music.stop()
+        except Exception as e:
+            print(f"Error stopping music: {e}")
 
-    screen_width = root.winfo_screenwidth()
-    screen_height = root.winfo_screenheight()
+if __name__ == "__main__":
+    try:
+        root = tk.Tk()
+        root.configure(bg="white")  # Set background to white
+        
+        # Center the window
+        window_width = 1800  # Set to your desired width
+        window_height = 1000  # Set to your desired height
+            
+        # Fix the window size
+        root.minsize(window_width, window_height)  # Set to your desired width and height
+        root.maxsize(2560, 1600)  # Set to your desired width and height
 
-    x_coordinate = int((screen_width / 2) - (window_width / 2))
-    y_coordinate = int((screen_height / 2) - (window_height / 2))
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
 
-    root.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
+        x_coordinate = int((screen_width / 2) - (window_width / 2))
+        y_coordinate = int((screen_height / 2) - (window_height / 2))
 
-    app = ImageTest(root, username="testUserImage")
-    root.mainloop()
+        root.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
+
+        # Set use_buttons=True to enable button-based answer selection
+        app = ImageTest(root, username="testUserImage", use_buttons=True)
+        root.mainloop()
+    except Exception as e:
+        print(f"Error in Image Test: {e}")
+        import traceback
+        traceback.print_exc()
+        # Try to clean up if possible
+        try:
+            import pygame
+            if pygame.mixer.get_init() and pygame.mixer.music.get_busy():
+                pygame.mixer.music.stop()
+        except:
+            pass

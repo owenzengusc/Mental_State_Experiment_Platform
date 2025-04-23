@@ -1,9 +1,13 @@
 import tkinter as tk
+from window_utils import set_responsive_geometry
 
 class InstructionScreen:
     def __init__(self, root, test_type, callback=None):
         self.root = root
         self.callback = callback
+        
+        # Use responsive geometry with test window type for better content fitting
+        set_responsive_geometry(root, "test")
         
         # Styling
         self.bg_color = "white"  # Dark background color
@@ -48,6 +52,18 @@ class InstructionScreen:
                 "After each video, you will be asked to rate your happiness level.\n"
                 "Use the scale provided to indicate how the video made you feel.\n"
                 "Please be as honest and accurate as possible in your ratings."
+            )
+            example_text = ""
+        elif test_type == "VideoTest":
+            self.root.title("Affective Videos Test")
+            self.root.configure(bg=self.bg_color)
+            self.title_label = tk.Label(root, text="Affective Videos Test \n" + "Instructions", font=self.font_large, bg=self.bg_color, fg="#9ba8ee")
+            self.title_label.pack(pady=70, anchor=tk.CENTER)
+            description_text = (
+                "You will watch some short video clips.\n"
+                "After each clip ends, you will be asked to rate\n"
+                "your emotional response on a scale from 1 to 10.\n"
+                "1 being very negative and 10 being very positive.\n"
             )
             example_text = ""
         elif test_type == "ColdPressorTest":
@@ -110,6 +126,10 @@ class InstructionScreen:
 
 if __name__ == "__main__":
     root = tk.Tk()
+    # Apply responsive sizing for stand-alone execution
+    from window_utils import set_responsive_geometry
+    set_responsive_geometry(root, "test")
+    
     test_type = input("Enter test type (MathTest/StroopTest/VideoFeedback): ")
     app = InstructionScreen(root, test_type)
     root.mainloop()
