@@ -329,6 +329,7 @@ def execute_sequence(selected_tests, ppl):
 def main():
     logger.info("Application starting")
     program_start_time = datetime.now() # Define program_start_time here
+    os.makedirs('./data', exist_ok=True) # Ensure data directory exists
     log_event('Program Start', program_start_time, None, None) # Log program start
     
     # Define start_button and user info entries early so update_start_button can access them
