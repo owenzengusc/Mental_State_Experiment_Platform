@@ -6,7 +6,7 @@ from window import *
 from user import *
 from StroopTest import *
 from MathTest import *
-from ImageTest import *  # TODO 1: Import the ImageTest class
+from ImageTest import * 
 from ColdPressorTest import *
 from FeedbackScreen import FeedbackScreen
 from InstructionScreen import InstructionScreen
