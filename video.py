@@ -4,6 +4,8 @@ import time
 import imageio
 from PIL import Image, ImageTk
 import csv
+import sys
+import os
 
 # Total game time in seconds (3 minutes = 180 seconds)
 TOTAL_GAME_TIME = 180
@@ -23,7 +25,16 @@ class VideoTest:
         self.start_time = time.time()
         self.callback = callback
         self.video_reader = None  # Placeholder for video reader
-        self.video_path = "videos/1.mp4"  # Your video path
+        
+        # Determine base path for resources
+        if getattr(sys, 'frozen', False):
+            # If running as executable, use the path relative to sys._MEIPASS
+            base_path = sys._MEIPASS
+        else:
+            # Otherwise, use the script's directory
+            base_path = os.path.dirname(__file__)
+            
+        self.video_path = os.path.join(base_path, "videos/1.mp4")  # Your video path
         self.after_ids = []  # Store after IDs for proper cleanup
 
         # UI Elements

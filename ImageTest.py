@@ -5,6 +5,7 @@ import time
 import threading
 from PIL import Image, ImageTk
 import os
+import sys
 
 # Total game time in seconds (3 minutes = 180 seconds)
 TOTAL_GAME_TIME = 10*10
@@ -52,6 +53,15 @@ class ImageTest:
         self.image_count = 0  # Add this line to keep track of shown images
         self.remaining_time = TOTAL_GAME_TIME
         self.answered = True  # Set to True initially to avoid the automatic miss at the start
+        
+        # Determine base path for resources
+        if getattr(sys, 'frozen', False):
+            # If running as executable, use the path relative to sys._MEIPASS
+            base_path = sys._MEIPASS
+        else:
+            # Otherwise, use the script's directory
+            base_path = os.path.dirname(__file__)
+
         # Create the widgets
         self.top_frame = tk.Frame(self.root, bg="white")  # Changed to white bg
         self.top_frame.pack(fill=tk.BOTH, padx=10, pady=10)
@@ -76,9 +86,9 @@ class ImageTest:
         # Initialize image list (you need to populate this with your image paths)
         
         image_folders = [
-            "images/osfstorage-archive/Checking",
-            "images/osfstorage-archive/Symmetry",
-            "images/osfstorage-archive/Washing",
+            os.path.join(base_path, "images/osfstorage-archive/Checking"),
+            os.path.join(base_path, "images/osfstorage-archive/Symmetry"),
+            os.path.join(base_path, "images/osfstorage-archive/Washing"),
         ]
 
         self.image_list = []  # To store paths of all images
