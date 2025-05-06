@@ -1,6 +1,6 @@
 # EEG_Sensor_Interface
 # Authors: Owen Zeng, Kaiden Ko
-# https://github.com/owenzengusc/EEG_TEST_Interface.git
+# https://github.com/owenzengusc/Mental_State_Experiment_Platform
 from window import *
 from user import *
 from StroopTest import *
