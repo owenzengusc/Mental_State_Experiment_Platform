@@ -74,10 +74,10 @@ class ColdPressorTest:
             writer.writerow([event_name, start_time_str, end_time_str, duration])
         
     def setup_gui(self):
-        self.label = tk.Label(self.master, text="", font=("Arial", 50))
+        self.label = tk.Label(self.master, text="", font=("Arial", 50), fg="black")
         self.label.pack(pady=20)
 
-        self.countdown_label = tk.Label(self.master, text="", font=("Arial", 70))
+        self.countdown_label = tk.Label(self.master, text="", font=("Arial", 70), fg="black")
         self.countdown_label.pack(pady=10)
 
     def start_initial_relaxation(self):
@@ -85,8 +85,8 @@ class ColdPressorTest:
             return
             
         self.master.configure(bg=background_color)
-        self.label.config(text="Please close your eyes and relax \n until next instruction", bg=background_color)
-        self.countdown_label.config(bg=background_color)
+        self.label.config(text="Please close your eyes and relax \n until next instruction", bg=background_color, fg="black")
+        self.countdown_label.config(bg=background_color, fg="black")
         self.start_countdown(self.first_relaxation_duration, self.play_cpt_instruction)  # 3 minutes
         self.StartTime = datetime.now()
         # Record the event start time and duration
@@ -102,8 +102,8 @@ class ColdPressorTest:
         duration = int((self.EndTime - self.StartTime).total_seconds() * 1000)  # Duration in milliseconds
         self.log_event('CPT Initial Relaxation End', self.StartTime, self.EndTime, duration, username=self.username)
         self.master.configure(bg="White")
-        self.label.config(text="Please put and keep \n your hand in iced water now.", bg="White")
-        self.countdown_label.config(bg="White")
+        self.label.config(text="Please put and keep \n your hand in iced water now.", bg="White", fg="black")
+        self.countdown_label.config(bg="White", fg="black")
         self.start_countdown(self.test_duration, self.end_instruction)  # 3 minutes for CPT
         self.StartTime = datetime.now()
         # Record the event start time and duration
@@ -119,8 +119,8 @@ class ColdPressorTest:
         duration = int((self.EndTime - self.StartTime).total_seconds() * 1000)  # Duration in milliseconds
         self.log_event('CPT Test End', self.StartTime, self.EndTime, duration, username=self.username)
         self.master.configure(bg=background_color)
-        self.label.config(text="You can remove your hand now.", bg=background_color)
-        self.countdown_label.config(text="", bg=background_color)
+        self.label.config(text="You can remove your hand now.", bg=background_color, fg="black")
+        self.countdown_label.config(text="", bg=background_color, fg="black")
         self.stop_music()
         self.play_audio('RemoveHand.mp3')
         self.master.after(5000, self.start_post_test_relaxation)  # 5 seconds
@@ -129,7 +129,7 @@ class ColdPressorTest:
         if not self.running:
             return
             
-        self.label.config(text="Please relax and close your eyes.")
+        self.label.config(text="Please relax and close your eyes.", bg=background_color, fg="black")
         self.start_countdown(self.post_test_relaxation_duration, self.test_complete)  # 175 seconds
         # Log the start of the post test relaxation
         self.StartTime = datetime.now()
@@ -145,8 +145,8 @@ class ColdPressorTest:
         duration = int((self.EndTime - self.StartTime).total_seconds() * 1000)  # Duration in milliseconds
         self.log_event('CPT Post Test Relaxation End', self.StartTime, self.EndTime, duration, username=self.username)
         self.stop_music()
-        self.label.config(text="Test Complete. Thank you.")
-        self.countdown_label.config(text="")
+        self.label.config(text="Test Complete. Thank you.", bg=background_color, fg="black")
+        self.countdown_label.config(text="", bg=background_color, fg="black")
         
         try:
             self.master.after(5000, self.master.destroy)  # Close window after 5 seconds
@@ -188,7 +188,7 @@ class ColdPressorTest:
                 callback()
             else:
                 try:
-                    self.countdown_label.config(text="Time Remaining: " + f"{time_left}" + "s")
+                    self.countdown_label.config(text="Time Remaining: " + f"{time_left}" + "s", fg="black")
                     self.master.after(1000, countdown, time_left-1)
                 except tk.TclError:
                     pass  # Window might already be destroyed

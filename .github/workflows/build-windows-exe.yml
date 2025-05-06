@@ -27,7 +27,7 @@ jobs:
         pip install pyinstaller
 
     - name: Build executable with PyInstaller
-      run: pyinstaller --onefile --windowed main.py # Use --console if it's a console app
+      run: pyinstaller --onefile --windowed --hidden-import=PIL main.py # Use --console if it's a console app
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4

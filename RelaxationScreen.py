@@ -64,11 +64,11 @@ class RelaxationScreen:
             self.pygame_initialized = False
 
     def setup_gui(self):
-        self.label = tk.Label(self.master, text="Please close your eyes and relax \n until next instruction", font=("Arial", 70), bg=background_color)
+        self.label = tk.Label(self.master, text="Please close your eyes and relax \n until next instruction", font=("Arial", 70), bg=background_color, fg="black")
         self.label.pack(pady=20)
 
         # Initialize countdown label with the correct starting duration
-        self.countdown_label = tk.Label(self.master, text="Time Remaining: "+f"{self.duration}"+"s", font=("Arial", 65), bg=background_color)
+        self.countdown_label = tk.Label(self.master, text="Time Remaining: "+f"{self.duration}"+"s", font=("Arial", 65), bg=background_color, fg="black")
         self.countdown_label.pack(pady=10)
 
     def play_music(self, file_path):
