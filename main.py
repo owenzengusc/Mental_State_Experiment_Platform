@@ -1,5 +1,5 @@
 # EEG_Sensor_Interface
-# Owen Zeng
+# Authors: Owen Zeng, Kaiden Ko
 # https://github.com/owenzengusc/EEG_TEST_Interface.git
 from window import *
 from user import *

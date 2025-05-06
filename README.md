@@ -4,7 +4,8 @@ This project provides an interface for tests in [Khan Lab @ USC](https://khan.us
 
 ## Author
 
-- **Owen Zeng**: Sole developer and maintainer of this project. You can contact me at [owenzeng@usc.edu](mailto:owenzeng@usc.edu).
+- **Owen Zeng**: Main developer and maintainer of this project. You can contact me at [owenzeng@usc.edu](mailto:owenzeng@usc.edu).
+- **Kaiden Ko**: Current maintainer and developer of this project.
 
 ## Features
 
