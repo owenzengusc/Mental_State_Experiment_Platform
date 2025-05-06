@@ -7,3 +7,6 @@ data/
 
 # venv
 venv/
+
+# all the .log
+*.log
