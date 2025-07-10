@@ -4,6 +4,7 @@ import random
 import csv
 import time
 import threading
+from resource_utils import get_resource_path
 
 # Define the colors and their names
 colors = {
@@ -161,7 +162,7 @@ class StroopTest:
             if not self.pygame_initialized:
                 pygame.mixer.init()
                 self.pygame_initialized = True
-            pygame.mixer.music.load("clock.mp3")
+            pygame.mixer.music.load(get_resource_path("clock.mp3"))
             pygame.mixer.music.play(-1)  # Play indefinitely until stopped
             self.music_playing = True
         except Exception as e:

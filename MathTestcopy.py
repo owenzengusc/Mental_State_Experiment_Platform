@@ -4,6 +4,7 @@ import random
 import csv
 import time
 import threading
+from resource_utils import get_resource_path
 
 # Total game time in seconds
 TOTAL_GAME_TIME = 60*3
@@ -103,14 +104,7 @@ class MathTest:
     def play_music(self):
         import pygame
         pygame.mixer.init()
-        pygame.mixer.music.load("clock.mp3")
-        pygame.mixer.music.play(6)
-
-    
-    def play_music(self):
-        import pygame
-        pygame.mixer.init()
-        pygame.mixer.music.load("clock.mp3")
+        pygame.mixer.music.load(get_resource_path("clock.mp3"))
         pygame.mixer.music.play(6)
     
     def play_music_thread(self):

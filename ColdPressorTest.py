@@ -3,6 +3,7 @@ import pygame
 import csv
 import time
 from datetime import datetime
+from resource_utils import get_resource_path
 
 background_color = "white"
 
@@ -91,7 +92,7 @@ class ColdPressorTest:
         self.StartTime = datetime.now()
         # Record the event start time and duration
         self.log_event('CPT Initial Relaxation Start', self.StartTime, None, None, username=self.username)
-        self.play_audio('relax.mp3')
+        self.play_audio(get_resource_path('relax.mp3'))
         
     def play_cpt_instruction(self):
         if not self.running:
@@ -108,8 +109,8 @@ class ColdPressorTest:
         self.StartTime = datetime.now()
         # Record the event start time and duration
         self.log_event('CPT Test Start', self.StartTime, None, None, username=self.username)
-        self.play_audio('CPT.mp3')
-        self.wait_and_play_next('clock.mp3')
+        self.play_audio(get_resource_path('CPT.mp3'))
+        self.wait_and_play_next(get_resource_path('clock.mp3'))
         
     def end_instruction(self):
         if not self.running:
@@ -122,7 +123,7 @@ class ColdPressorTest:
         self.label.config(text="You can remove your hand now.", bg=background_color, fg="black")
         self.countdown_label.config(text="", bg=background_color, fg="black")
         self.stop_music()
-        self.play_audio('RemoveHand.mp3')
+        self.play_audio(get_resource_path('RemoveHand.mp3'))
         self.master.after(5000, self.start_post_test_relaxation)  # 5 seconds
 
     def start_post_test_relaxation(self):
@@ -134,7 +135,7 @@ class ColdPressorTest:
         # Log the start of the post test relaxation
         self.StartTime = datetime.now()
         self.log_event('CPT Post Test Relaxation Start', self.StartTime, None, None, username=self.username)
-        self.play_audio('relax.mp3')
+        self.play_audio(get_resource_path('relax.mp3'))
 
     def test_complete(self):
         if not self.running:
@@ -156,7 +157,7 @@ class ColdPressorTest:
     def play_audio(self, file_path):
         try:
             pygame.mixer.music.load(file_path)
-            if file_path == 'clock.mp3':
+            if 'clock.mp3' in file_path:
                 pygame.mixer.music.play(10) # Play 10 times
             else:
                 pygame.mixer.music.play()

@@ -3,6 +3,7 @@ import tkinter as tk
 import pygame
 import threading
 import time
+from resource_utils import get_resource_path
 
 background_color = "white"
 
@@ -48,7 +49,7 @@ class RelaxationScreen:
         self.init_pygame()
         
         # Play music in a thread to avoid blocking
-        self.play_music_thread('relax.mp3')
+        self.play_music_thread(get_resource_path('relax.mp3'))
 
         self.setup_gui()
         self.update_countdown()  # Start the countdown

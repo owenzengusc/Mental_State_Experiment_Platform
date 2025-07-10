@@ -34,7 +34,7 @@ class VideoTest:
             # Otherwise, use the script's directory
             base_path = os.path.dirname(__file__)
             
-        self.video_path = os.path.join(base_path, "videos/1.mp4")  # Your video path
+        self.video_path = os.path.join(base_path, "videos/1.mp4")  # video path
         self.after_ids = []  # Store after IDs for proper cleanup
 
         # UI Elements
